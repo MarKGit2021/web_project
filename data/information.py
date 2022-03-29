@@ -8,7 +8,7 @@ from sqlalchemy_serializer import SerializerMixin
 from .db_session import SqlAlchemyBase
 
 
-class Information(SqlAlchemyBase, UserMixin, SerializerMixin):
+class Information(SqlAlchemyBase):
     __tablename__ = 'information'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
