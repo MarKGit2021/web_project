@@ -20,5 +20,3 @@ class Information(SqlAlchemyBase):
                                       default=datetime.datetime.now)
     information = orm.relation("User")
 
-    def check_password(self, password):
-        return self.hashed_password == password
