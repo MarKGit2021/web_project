@@ -18,5 +18,6 @@ class Information(SqlAlchemyBase):
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
-    user = orm.relation("User")
+    user = orm.relation("User", back_populates='information')
+    comments = orm.relation('Comment', back_populates='information')
 
