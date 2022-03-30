@@ -9,7 +9,7 @@ from .db_session import SqlAlchemyBase
 class OldQueries(SqlAlchemyBase):
     __tablename__ = 'old_queries'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('user.id'), nullable=False)
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
     information_by_word_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('information_by_word.id'),
                                                nullable=False)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,

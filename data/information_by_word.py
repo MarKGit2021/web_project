@@ -12,5 +12,4 @@ class InformationByWord(SqlAlchemyBase):
                            primary_key=True, autoincrement=True)
     word_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('words.id'), nullable=False)
     information_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('information.id'), nullable=False)
-    word = orm.relation('Word')
     information = orm.relation('Information')
