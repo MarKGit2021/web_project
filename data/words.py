@@ -10,3 +10,4 @@ class Word(SqlAlchemyBase):
     __tablename__ = 'words'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     word = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    information_by_word = orm.relation('InformationByWord')
