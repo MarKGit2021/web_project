@@ -6,13 +6,13 @@ if __name__ == '__main__':
     # a = input().strip()
     db_session.global_init('first.db')
     db = db_session.create_session()
-    # user = User()
-    # user.name = 'User1'
-    # user.surname = 'Users'
-    # user.hashed_password = 'password'
-    # user.email = 'email.email'
-    # db.add(user)
-    # db.commit()
+    user = User()
+    user.name = 'User1'
+    user.surname = 'Users'
+    user.hashed_password = 'password'
+    user.email = 'email.email'
+    db.add(user)
+    db.commit()
     for user in db.query(User).all():
         print(user)
     inf = Information()

@@ -17,4 +17,4 @@ class OldQueries(SqlAlchemyBase):
     type_of_query = sqlalchemy.Column(sqlalchemy.String, nullable=False,
                                       default='r')  # По умолчанию, пользователь читает страницу
     user = orm.relation('User')
-    information_by_word = orm.relation('InformationByWord')
+    # information_by_word = orm.relation('InformationByWord')
