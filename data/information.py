@@ -7,16 +7,15 @@ from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
 
-
 association_table = sqlalchemy.Table(
-        'information_by_word',
-        SqlAlchemyBase.metadata,
-        sqlalchemy.Column('words', sqlalchemy.Integer,
-                          sqlalchemy.ForeignKey('words.id')),
-        sqlalchemy.Column('information', sqlalchemy.Integer,
-                          sqlalchemy.ForeignKey('information.id')),
-        sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True, autoincrement=True)
-        )
+    'information_by_word',
+    SqlAlchemyBase.metadata,
+    sqlalchemy.Column('words', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('words.id')),
+    sqlalchemy.Column('information', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('information.id')),
+    sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    )
 
 
 class Information(SqlAlchemyBase):
