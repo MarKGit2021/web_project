@@ -4,7 +4,8 @@ from sqlalchemy import orm
 from .db_session import SqlAlchemyBase
 
 
-# Пока написала, пусть будет. Если что, можно вырезать
+# Этот класс я убрала. Таблица есть, класса нет,тк нам к нему обращаться не надо.
+# Таблица нужна только как промежуточная сущность для связи вногие ко многим
 class InformationByWord(SqlAlchemyBase):
     __tablename__ = 'information_by_word'
 
