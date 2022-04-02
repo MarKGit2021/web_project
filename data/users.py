@@ -11,13 +11,13 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
 
-    id = sqlalchemy.Column(sqlalchemy.Integer,
-                           primary_key=True, autoincrement=True)
+    __id = sqlalchemy.Column(sqlalchemy.Integer,
+                             primary_key=True, autoincrement=True)
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False, index=True)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    __hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
     type_of_user = sqlalchemy.Column(sqlalchemy.Integer, default=0)
@@ -26,7 +26,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     queries = orm.relation('OldQueries', back_populates='user')
 
     def check_password(self, password) -> bool:
-        return self.hashed_password == password
+        return self.__hashed_password == password
 
     def get_user_information(self) -> dict:
         """
@@ -42,9 +42,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             }
 
     def __str__(self):
-        return f'Пользователь с id: {self.id}; name: {self.name}; ' \
-               f'surname: {self.surname}; email: {self.email}; ' \
-               f'hashed password: {self.hashed_password}'
+        return f'Пользователь с id: {self.__id}; name: {self.name}; ' \
+               f'surname: {self.surname}; email: {self.email}'
 
     def __repr__(self):
-        return f'Пользователь с id: {self.id}'
+        return f'Пользователь с id: {self.__id}'
