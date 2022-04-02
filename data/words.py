@@ -14,3 +14,9 @@ class Word(SqlAlchemyBase):
     information = orm.relation("Information",
                                secondary="information_by_word",
                                backref="information")
+
+    def __str__(self):
+        return f"Слово id: {self.id}, word: {self.word}"
+
+    def __repr__(self):
+        return f'Слово id: {self.id}'

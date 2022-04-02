@@ -23,6 +23,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     type_of_user = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     information = orm.relation("Information", back_populates='user')
     comments = orm.relation("Comment", back_populates='user')
+    queries = orm.relation('OldQueries', back_populates='user')
 
     def check_password(self, password) -> bool:
         return self.hashed_password == password
