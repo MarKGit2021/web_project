@@ -11,8 +11,8 @@ from .db_session import SqlAlchemyBase
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
 
-    __id = sqlalchemy.Column(sqlalchemy.Integer,
-                             primary_key=True, autoincrement=True)
+    id = sqlalchemy.Column(sqlalchemy.Integer,
+                           primary_key=True, autoincrement=True)
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
@@ -42,8 +42,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             }
 
     def __str__(self):
-        return f'Пользователь с id: {self.__id}; name: {self.name}; ' \
+        return f'Пользователь с id: {self.id}; name: {self.name}; ' \
                f'surname: {self.surname}; email: {self.email}'
 
     def __repr__(self):
-        return f'Пользователь с id: {self.__id}'
+        return f'Пользователь с id: {self.id}'
