@@ -7,6 +7,8 @@ from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
 
+POINTS_CONST = 5  # Сколько нужно лайков, чтобы стать модератором
+
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
@@ -47,3 +49,13 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def __repr__(self):
         return f'Пользователь(id: {self.id})'
+
+    def new_point(self):
+        """
+        Метод, который увеличивает количество лайков и проверяет, когда нужно повысить уровень пользователя
+        :return:
+        """
+        self.points += 1
+        if self.points == POINTS_CONST:
+            self.type_of_user = 1
+
