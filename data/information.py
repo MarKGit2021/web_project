@@ -1,11 +1,16 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import datetime
 
 import sqlalchemy
-from flask_login import UserMixin
 from sqlalchemy import orm
-from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
+
+if TYPE_CHECKING:
+    from data.words import Word
+from data.information_by_word import InformationByWord
 
 
 class Information(SqlAlchemyBase):
@@ -65,3 +70,19 @@ class Information(SqlAlchemyBase):
         with open(f'{folder}information_{self.id}.txt', 'w', encoding='utf-8') as file:
             file.write(text.strip())
         self.folder = f'{folder}information_{self.id}.txt'
+
+    def append_word(self, word: Word, db):
+        """
+        Метод, который добавляет к информации слово
+        :param word: Word (слово, которое нужно добавить)
+        :param db: база, с которой мы работаем
+        :return: None
+        """
+        if db.query(InformationByWord).filter(InformationByWord.word_id == word.id,
+                                              InformationByWord.information_id == self.id):
+            return
+        inf_by_word = InformationByWord()
+        inf_by_word.word = word
+        inf_by_word.information = self
+        db.add(inf_by_word)
+        db.commit()

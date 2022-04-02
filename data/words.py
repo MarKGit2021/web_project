@@ -1,7 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 import sqlalchemy
 from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
+
+if TYPE_CHECKING:
+    from data.information import Information
+from data.information_by_word import InformationByWord
 
 
 # Этот класс в принципе тоже можно будет вырезать.
@@ -17,3 +24,19 @@ class Word(SqlAlchemyBase):
 
     def __repr__(self):
         return f'Слово(id: {self.id})'
+
+    def append_information(self, information: Information, db):
+        """
+        Метод, который добавляет к слову информацию
+        :param information: Information (информация, которую добавляем)
+        :param db: База данных, с которой работаем.
+        :return: None
+        """
+        if db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                              InformationByWord.information_id == information.id):
+            return
+        inf_by_word = InformationByWord()
+        inf_by_word.word = self
+        inf_by_word.information = information
+        db.add(inf_by_word)
+        db.commit()
