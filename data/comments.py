@@ -28,7 +28,6 @@ class Comment(SqlAlchemyBase):
         Метод, который достает откуда-то текст комментария. Пока текст достается из файла по пути folder
         :return: пока str
         """
-        print(self.folder)
         with open(self.folder, 'r', encoding='utf-8') as file:
             text = file.read().strip()
         return text

@@ -29,3 +29,11 @@ class OldQueries(SqlAlchemyBase):
             'type_of_query': self.type_of_query,
             'word': self.word.word
             }
+
+    def __str__(self):
+        return f"Старый запрос id: {self.id}, user_id: {self.user_id}, user_name: {self.user.name}, " \
+               f"user_surname: {self.user.surname}, information_id: {self.information_id}, word: {self.word.word}"
+
+    def __repr__(self):
+        return f"Старый запрос id: {self.id}, user_id: {self.user_id}," \
+               f"information_id: {self.information_id}, word_id: {self.word_id}"
