@@ -23,7 +23,8 @@ class Information(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    folder = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    folder = sqlalchemy.Column(sqlalchemy.String)  # , nullable=False) - Пока информация сохраняется в файл,
+    # нужно, чтоюы в первый раз она сохранилась без пути
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
@@ -37,26 +38,22 @@ class Information(SqlAlchemyBase):
         Метод, который достает откуда-то содержимое информации. Пока достаю из файла.
         :return: str
         """
-        pass
+        if self.is_blocked:
+            return 'Данная информация заблокирована оператором, тк она содержит нежелательный контент'
+        with open(self.folder, 'r', encoding='utf-8') as file:
+            text = file.read().strip()
+        return text
 
     def get_information(self):
         """
                 Метод, который возвращает словарь, который можно легко вставить в html (render_template)
                 :return: dict
         """
-        dct = {
-            'user_name': self.user.name,
-            'user_surname': self.user.surname,
-            'error': self.is_blocked,
-            'modified_date': self.modified_date,
-            'points': self.points,
-            'number_of_comments': len(self.comments)
-            }
-        if self.is_blocked:
-            dct['text'] = 'Данная информация заблокирована оператором, тк она содержит нежелательный контент'
-        else:
-            dct['text'] = self.get_text_information()
-        return dct
+        return {'user_name': self.user.name, 'user_surname': self.user.surname,
+                'error': self.is_blocked,
+                'modified_date': self.modified_date, 'points': self.points,
+                'number_of_comments': len(self.comments),
+                'text': self.get_text_information()}
 
     def __str__(self):
         return f'Информация id: {self.id}; user_name: {self.user.name}; user_surname: {self.user.surname};' \
@@ -65,4 +62,15 @@ class Information(SqlAlchemyBase):
     def __repr__(self):
         return f'Информация id: {self.id}; user_id: {self.user_id}; date: {self.modified_date}'
 
-
+    def save_text(self, text: str, folder: str = './db/files/'):
+        """
+        Метод, который сохраняет текст в файл и сам записывает к нему путь.
+        Если будем записываеть комменты в бд, то он будет как-то преобразовывть или еще что-то
+        :param text: str, текст, который сохраняем
+        :param folder: str, путь к папке, где будет лежать файл. По умолчанию стоит тот путь,
+         который будет, если вызывать из main
+        :return: None
+        """
+        with open(f'{folder}information_{self.id}.txt', 'w', encoding='utf-8') as file:
+            file.write(text.strip())
+        self.folder = f'{folder}information_{self.id}.txt'
