@@ -42,4 +42,4 @@ class Complaints(SqlAlchemyBase):
                f'user_surname: {self.user.surname}, information_id: {self.information_id}'
 
     def __repr__(self):
-        return f'Жалоба id: {self.id}, user_id: {self.user_id}, information_id: {self.information_id}'
+        return f'Жалоба(id: {self.id}, user_id: {self.user_id}, information_id: {self.information_id})'

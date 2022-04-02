@@ -35,5 +35,5 @@ class OldQueries(SqlAlchemyBase):
                f"user_surname: {self.user.surname}, information_id: {self.information_id}, word: {self.word.word}"
 
     def __repr__(self):
-        return f"Старый запрос id: {self.id}, user_id: {self.user_id}," \
-               f"information_id: {self.information_id}, word_id: {self.word_id}"
+        return f"Старый_запрос(id: {self.id}, user_id: {self.user_id}," \
+               f"information_id: {self.information_id}, word_id: {self.word_id})"

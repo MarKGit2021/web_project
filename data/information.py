@@ -7,16 +7,6 @@ from sqlalchemy_serializer import SerializerMixin
 
 from .db_session import SqlAlchemyBase
 
-association_table = sqlalchemy.Table(
-    'information_by_word',
-    SqlAlchemyBase.metadata,
-    sqlalchemy.Column('words', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('words.id')),
-    sqlalchemy.Column('information', sqlalchemy.Integer,
-                      sqlalchemy.ForeignKey('information.id')),
-    sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    )
-
 
 class Information(SqlAlchemyBase):
     __tablename__ = 'information'
@@ -32,6 +22,7 @@ class Information(SqlAlchemyBase):
     is_blocked = sqlalchemy.Column(sqlalchemy.Boolean, default=False, nullable=False)
     user = orm.relation("User", back_populates='information')
     comments = orm.relation('Comment', back_populates='information')
+    all_words = orm.relation('InformationByWord', back_populates='information')
 
     def get_text_information(self) -> str:
         """
@@ -60,7 +51,7 @@ class Information(SqlAlchemyBase):
                f' date: {self.modified_date}; is_blocked: {self.is_blocked}; points: {self.points}'
 
     def __repr__(self):
-        return f'Информация id: {self.id}; user_id: {self.user_id}; date: {self.modified_date}'
+        return f'Информация(id: {self.id}; user_id: {self.user_id}; date: {self.modified_date})'
 
     def save_text(self, text: str, folder: str = './db/files/'):
         """

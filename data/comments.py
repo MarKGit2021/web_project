@@ -50,4 +50,4 @@ class Comment(SqlAlchemyBase):
                f' date: {self.modified_date}; is_blocked: {self.is_blocked}'
 
     def __repr__(self):
-        return f'Комментарий id: {self.id}; user_id: {self.user_id}; date: {self.modified_date}'
+        return f'Комментарий(id: {self.id}; user_id: {self.user_id}; date: {self.modified_date})'

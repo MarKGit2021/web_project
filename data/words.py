@@ -10,13 +10,10 @@ class Word(SqlAlchemyBase):
     __tablename__ = 'words'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     word = sqlalchemy.Column(sqlalchemy.String, nullable=False)
-    # information_by_word = orm.relation('InformationByWord')
-    information = orm.relation("Information",
-                               secondary="information_by_word",
-                               backref="information")
+    all_information = orm.relation("InformationByWord", back_populates='word')
 
     def __str__(self):
         return f"Слово id: {self.id}, word: {self.word}"
 
     def __repr__(self):
-        return f'Слово id: {self.id}'
+        return f'Слово(id: {self.id})'
