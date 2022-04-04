@@ -35,7 +35,7 @@ if __name__ == '__main__':
     comment = Comment()
     comment.information_id = 1
     comment.user_id = 1
-    comment.folder = 'comment_1.txt'
+    comment.text = 'comment number 1'
     db.add(comment)
     db.commit()
     print(user.comments)
