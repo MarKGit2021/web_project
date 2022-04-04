@@ -4,6 +4,8 @@ import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
+from werkzeug.security import generate_password_hash
+
 from likes import Like
 
 from .db_session import SqlAlchemyBase
@@ -29,7 +31,21 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     queries = orm.relation('OldQueries', back_populates='user')
 
     def check_password(self, password) -> bool:
+        """
+        Метод, который проверяет на правильность пароль
+        :param password: str
+        :return: bool
+        """
         return self.__hashed_password == password
+
+    def set_password(self, password):
+        """
+        Метод, который добавляет пароль только если мы только что создали класс
+        :param password: str пароль
+        :return: None
+        """
+        if self.id is None:
+            self.__hashed_password = generate_password_hash(password)
 
     def get_user_information(self) -> dict:
         """
