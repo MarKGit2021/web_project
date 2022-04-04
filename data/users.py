@@ -4,6 +4,7 @@ import sqlalchemy
 from flask_login import UserMixin
 from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
+from likes import Like
 
 from .db_session import SqlAlchemyBase
 
@@ -50,12 +51,41 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     def __repr__(self):
         return f'Пользователь(id: {self.id})'
 
+    def click_like(self, information_id, db):
+        """
+        Метод, который можно вызвать при нажатии пользователем на лайк:
+        если лайк уже был нажат, то он удаляется. Если его не было, он создается
+        :param information_id: int
+        :param db: база, с которой работаем
+        :return: bool - закрашивать лайк или нет.
+        """
+        if self.check_like(information_id, db):
+            db.delete(db.query(Like).filter(Like.information_id == information_id,
+                                            Like.user_id == self.id))
+            db.commit()
+            return False
+        like = Like()
+        like.user_id = self.id
+        like.information_id = information_id
+        db.add(Like)
+        db.commit()
+        return True
+
+    def check_like(self, information_id, db):
+        """
+        Метод, который проверяет, ставил ли пользователь лайк на эту страничку
+        :param information_id: int
+        :param db: база, с которой работаем
+        :return: bool, закрашивать лайк или нет
+        """
+        return len(db.query(Like).filter(Like.information_id == information_id,
+                                         Like.user_id == self.id)) == 0
+
     def new_point(self):
         """
         Метод, который увеличивает количество лайков и проверяет, когда нужно повысить уровень пользователя
-        :return:
+        :return: None
         """
         self.points += 1
         if self.points == POINTS_CONST:
             self.type_of_user = 1
-
