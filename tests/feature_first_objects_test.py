@@ -19,9 +19,15 @@ if __name__ == '__main__':
         print(user)
     inf = Information()
     inf.user_id = 1
-    inf.folder = 'https/folder'
     db.add(inf)
     db.commit()
+    inf.save_text('text', '../db/files/')
+    word = Word()
+    word.word = 'text'
+    db.add(word)
+    db.commit()
+    word.append_information(inf, db=db)
+
     user = db.query(User).first()
     # inf = db.query(Information).all()[
     print(user)

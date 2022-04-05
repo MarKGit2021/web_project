@@ -3,6 +3,7 @@ from flask_login import LoginManager
 
 from data import db_session
 from forms.search_form import SearchForm
+from func.top_information import get_top_information
 
 db_session.global_init('db/db.db')
 app = Flask(__name__)
@@ -21,7 +22,10 @@ def main_func():
     if form.validate_on_submit():
         print('tytyt')
         search(form.word)
-    return render_template('main.html', is_authenticated=False, form=form)
+    db = db_session.create_session()
+    top_information = get_top_information(db)
+    return render_template('main.html', is_authenticated=False, form=form,
+                           inf=top_information, len_form=len(top_information))
 
 
 if __name__ == '__main__':

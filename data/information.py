@@ -49,7 +49,8 @@ class Information(SqlAlchemyBase):
                 'error': self.is_blocked,
                 'modified_date': self.modified_date, 'points': self.points,
                 'number_of_comments': len(self.comments),
-                'text': self.get_text_information()}
+                'text': self.get_text_information(),
+                'main_word': self.all_words[0].word}
 
     def __str__(self):
         return f'Информация id: {self.id}; user_name: {self.user.name}; user_surname: {self.user.surname};' \
@@ -69,7 +70,7 @@ class Information(SqlAlchemyBase):
         """
         with open(f'{folder}information_{self.id}.txt', 'w', encoding='utf-8') as file:
             file.write(text.strip())
-        self.folder = f'{folder}information_{self.id}.txt'
+        self.folder = f'./db/files/information_{self.id}.txt'
 
     def append_word(self, word: Word, db):
         """
@@ -78,8 +79,8 @@ class Information(SqlAlchemyBase):
         :param db: база, с которой мы работаем
         :return: None
         """
-        if db.query(InformationByWord).filter(InformationByWord.word_id == word.id,
-                                              InformationByWord.information_id == self.id):
+        if len(list(db.query(InformationByWord).filter(InformationByWord.word_id == word.id,
+                                                       InformationByWord.information_id == self.id))) != 0:
             return
         inf_by_word = InformationByWord()
         inf_by_word.word = word

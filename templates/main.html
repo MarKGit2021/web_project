@@ -31,6 +31,14 @@
             right: 20%;
             top: 5px;
         }
+        .top_10_information_block{
+        font-family: 'Lobster', cursive;
+        position: absolute;
+        top: 250px;
+        left: 10%;
+        right: 10%;
+        z-index: 3;
+        }
         .search_area{
             position: absolute;
             height: 60px;
@@ -54,7 +62,27 @@
             <p class="search_button">{{ form.submit(type="submit", class="btn btn-primary", class="search_button") }}</p>
         </div>
     </form>
-        Топ 10 информации и текст какой-нибудь
+        <center><div class="top_10_information_block">Топ 10 информации и текст какой-нибудь
+        <table class="table">
+          <thead>
+            <tr class="table-active">
+              <th scope="col">Номер в топе</th>
+              <th scope="col">Запрос</th>
+                <th scope="col">Количество лайков</th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for i in range(len_form) %}
+            <tr>
+        <!--      <th scope="row">1</th>-->
+              <td class="table-light">{{ i }}</td>
+              <td class="table-light">{{ inf[i]["main_word"] }}</td>
+              <td class="table-light">{{ inf[i]["points"] }}</td>
+            </tr>
+        {% endfor %}
+          </tbody>
+        </table></div></center>
+
     </div>
     </body>
 {% endblock %}<!DOCTYPE html>
