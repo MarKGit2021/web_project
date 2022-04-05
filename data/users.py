@@ -6,7 +6,7 @@ from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash
 
-from likes import Like
+from .likes import Like
 
 from .db_session import SqlAlchemyBase
 

@@ -1,0 +1,60 @@
+{% extends "headline.html" %}
+
+{% block content %}
+    <head>
+        <style type="text/css">
+        .content_block{
+            position: absolute;
+            /*width: 80%;*/
+            height: 200%;
+            z-index: 2;
+            left: 10%;
+            right: 10%;
+            bottom: 80px;
+            top: 160px;
+            background-color: white;
+            }
+
+        .block_search{
+            position: absolute;
+            height: 100px;
+            left: 10%;
+            right: 10%;
+        }
+        .search_button{
+            font-family: 'Lobster', cursive;
+            position: absolute;
+            height: 60px;
+            border-color: greenyellow;
+            width: 100px;
+            left: 75%;
+            right: 20%;
+            top: 5px;
+        }
+        .search_area{
+            position: absolute;
+            height: 60px;
+            left: 3%;
+            right: 20%;
+            border-color: greenyellow;
+            top: 10px;
+        }
+        </style>
+    </head>
+    <body>
+    <div class="content_block">
+        <center><h1 class="big_header_block">
+            Поиск
+        </h1></center>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="block_search">
+            {{ form.word(class="form-control", class="search_area") }}<br>
+            <p class="search_button">{{ form.submit(type="submit", class="btn btn-primary", class="search_button") }}</p>
+        </div>
+    </form>
+        Топ 10 информации и текст какой-нибудь
+    </div>
+    </body>
+{% endblock %}<!DOCTYPE html>

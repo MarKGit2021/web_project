@@ -14,7 +14,34 @@
         background-color: #006400;
         z-index: 6;
     }
-    .login_block{
+    .content_block{
+        position: absolute;
+        /*width: 80%;*/
+        height: 200%;
+        z-index: 2;
+        left: 10%;
+        right: 10%;
+        bottom: 80px;
+        top: 160px;
+        background-color: white;
+    }
+    .left_right_block{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        /*background-image: url('./green_fon_1.jpg');*/
+        background-color:  #ECEABE;
+        z-index: 1;
+    }
+    .font_block_lobster{
+        font-family: 'Lobster', cursive;
+        }
+    .big_header_block{
+        font-family: 'Lobster', cursive;
+        font-size: 100px;
+    }
+
+    .login_block_button{
         font-family: 'Lobster', cursive;
         position: fixed;
         width: 100px;
@@ -23,7 +50,7 @@
         left: 75%;
         top: 20px;
     }
-    .register{
+    .register_button{
         font-family: 'Lobster', cursive;
         position: fixed;
         width: 250px;
@@ -31,6 +58,15 @@
         background-color: #008000;
         left: 82%;
         top: 20px;
+    }
+    .private_office_button{
+        font-family: 'Lobster', cursive;
+        position: fixed;
+        width: 250px;
+        height: 60px;
+        background-color: #008000;
+        left: 82%;
+        top: 10px;        
     }
 .navbar {
   font-family: 'Lobster', cursive;
@@ -43,17 +79,17 @@
 <body>
 
     <!-- Begin page content -->
+<div class="left_right_block"></div>
 <div class="block">
     <h1 style="color: white" class="navbar">Название сайта!</h1>
     {% if not is_authenticated %}
-        <a href="/login"><button class="login_block" style="color: white">Войти</button></a>
-        <a href="/register"><button class="register" style="color: white">Зарегистрироваться</button></a>
+        <a href="/login"><button class="login_block_button" style="color: white">Войти</button></a>
+        <a href="/register"><button class="register_button" style="color: white">Зарегистрироваться</button></a>
     {% else %}
-        <a href="/private_office"><button class="login_block" style="color: white">Личный кабинет</button></a>
+        <a href="/private_office"><button class="private_office_button" style="color: white">Личный кабинет</button></a>
     {% endif %}
-
-
 </div>
+<div class="content_block"></div>
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
