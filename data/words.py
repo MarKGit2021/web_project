@@ -34,9 +34,9 @@ class Word(SqlAlchemyBase):
         """
         if len(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
                                                        InformationByWord.information_id == information.id))) != 0:
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
-                                                          InformationByWord.information_id == information.id)))
+            # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            # print(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                                          # InformationByWord.information_id == information.id)))
             return
         inf_by_word = InformationByWord()
         inf_by_word.word = self
