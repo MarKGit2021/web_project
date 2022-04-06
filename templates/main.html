@@ -62,6 +62,7 @@
             <p class="search_button">{{ form.submit(type="submit", class="btn btn-primary", class="search_button") }}</p>
         </div>
     </form>
+        <br>
         <center><div class="top_10_information_block">Топ 10 информации и текст какой-нибудь
         <table class="table">
           <thead>
@@ -76,7 +77,7 @@
             <tr>
         <!--      <th scope="row">1</th>-->
               <td class="table-light">{{ i }}</td>
-              <td class="table-light">{{ inf[i]["main_word"] }}</td>
+              <td class="table-light">{{ inf[i]["main_word"].word }}</td>
               <td class="table-light">{{ inf[i]["points"] }}</td>
             </tr>
         {% endfor %}
@@ -85,4 +86,4 @@
 
     </div>
     </body>
-{% endblock %}<!DOCTYPE html>
+{% endblock %}

@@ -49,7 +49,6 @@ class Information(SqlAlchemyBase):
                 'error': self.is_blocked,
                 'modified_date': self.modified_date, 'points': self.points,
                 'number_of_comments': len(self.comments),
-                'text': self.get_text_information(),
                 'main_word': self.all_words[0].word}
 
     def __str__(self):
@@ -59,7 +58,7 @@ class Information(SqlAlchemyBase):
     def __repr__(self):
         return f'Информация(id: {self.id}; user_id: {self.user_id}; date: {self.modified_date})'
 
-    def save_text(self, text: str, folder: str = './db/files/'):
+    def save_text(self, text: str, folder: str = './templates/files/'):
         """
         Метод, который сохраняет текст в файл и сам записывает к нему путь.
         Если будем записываеть комменты в бд, то он будет как-то преобразовывть или еще что-то
@@ -70,7 +69,7 @@ class Information(SqlAlchemyBase):
         """
         with open(f'{folder}information_{self.id}.txt', 'w', encoding='utf-8') as file:
             file.write(text.strip())
-        self.folder = f'./db/files/information_{self.id}.txt'
+        self.folder = f'./files/information_{self.id}.txt'
 
     def append_word(self, word: Word, db):
         """
