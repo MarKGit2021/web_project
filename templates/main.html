@@ -39,6 +39,16 @@
             border-color: greenyellow;
             top: 10px;
         }
+        table {
+        table-layout: fixed;
+        width: 100%;
+       }
+       td {
+        border: 1px solid #333;
+        padding: 5px;
+        position: relative;
+        height: 50px;
+       }
         </style>
     </head>
     <body>
@@ -68,9 +78,21 @@
         {% for i in range(len_form) %}
             <tr>
         <!--      <th scope="row">1</th>-->
-              <td class="table-light">{{ i }}</td>
-              <td class="table-light">{{ inf[i]["main_word"].word }}</td>
-              <td class="table-light">{{ inf[i]["points"] }}</td>
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ inf[i]['address'] }}">{{ i }}</a></td>
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ inf[i]['address'] }}">{{ inf[i]["main_word"].word }}</a></td>
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ inf[i]['address'] }}">{{ inf[i]["points"] }}</a></td>
             </tr>
         {% endfor %}
           </tbody>

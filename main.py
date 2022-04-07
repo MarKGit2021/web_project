@@ -19,18 +19,20 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 # login_manager.init_app(app)
 
 def search(word: str):
+    """
+    Метод, который ищет информацию, и если находит в зависимости от количества перенаправляет на нужную страницу
+    :param word: str, слово для поиска
+    :return:
+    """
     db = db_session.create_session()
     words = db.query(Word).filter(Word.word == word.strip())
     if len(list(words)) == 0:
-        print('rere')
         return redirect(f'/search/{word}')
     information = words[0].all_information
     if len(information) == 0:
-        print('123')
         return redirect(f'/search/{word}')
-    elif len(information) == 1:
-        print('[][][]')
-        return redirect(f'/information/{address_created(information[0].id)}')
+    # elif len(information) == 1:
+    #     return redirect(f'/information/{address_created(information[0].id)}')
     else:
         return all_information(information, db)
 
