@@ -11,6 +11,7 @@ from .db_session import SqlAlchemyBase
 if TYPE_CHECKING:
     from data.words import Word
 from data.information_by_word import InformationByWord
+from func.address_created import address_created
 
 
 class Information(SqlAlchemyBase):
@@ -49,7 +50,8 @@ class Information(SqlAlchemyBase):
                 'error': self.is_blocked,
                 'modified_date': self.modified_date, 'points': self.points,
                 'number_of_comments': len(self.comments),
-                'main_word': self.all_words[0].word}
+                'main_word': self.all_words[0].word,
+                'address': address_created(self.id)}
 
     def __str__(self):
         return f'Информация id: {self.id}; user_name: {self.user.name}; user_surname: {self.user.surname};' \

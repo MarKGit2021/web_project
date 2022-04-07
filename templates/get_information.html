@@ -18,8 +18,10 @@
 <body>
 <div class="content_block">
     <main role="main" class="container">
+        <center>
     {% block content_1 %}
     {% endblock %}
+        </center>
     <p class="font_block_lobster">Автор: {{ user_name }} {{user_surname }}</p>
     <p class="font_block_lobster">Дата создания: {{ modified_date }}</p>
     <p class="font_block_lobster">Комментарии: {{ number_of_comments }}</p>

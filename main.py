@@ -31,14 +31,25 @@ def search(word: str):
         print('123')
         return redirect(f'/search/{word}')
     elif len(information) == 1:
+        return all_information(information, db)
+    elif len(information) == 1:
         print('[][][]')
         return redirect(f'/information/{address_created(information[0].id)}')
+
 
 # def add_new_information():
 #         new_word = Word()
 #         new_word.word = word.strip()
 #         db.add(new_word)
 #         db.commit()
+
+def all_information(information, db):
+    inf_information = list(map(lambda x: db.query(Information).filter(Information.id
+                                                                      == x.information_id
+                                                                      )[0].get_information(),
+                               information))
+    print(inf_information)
+    return render_template('all_information.html', inf_information=inf_information)
 
 
 @app.route('/search/<word>', methods=['GET'])
