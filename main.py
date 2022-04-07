@@ -31,8 +31,8 @@ def search(word: str):
     information = words[0].all_information
     if len(information) == 0:
         return redirect(f'/search/{word}')
-    # elif len(information) == 1:
-    #     return redirect(f'/information/{address_created(information[0].id)}')
+    elif len(information) == 1:
+        return redirect(f'/information/{address_created(information[0].id)}')
     else:
         return all_information(information, db)
 
@@ -60,7 +60,17 @@ def all_information(information, db):
 
 @app.route('/search/<word>', methods=['GET'])
 def search_information(word):
-    pass
+    """
+    Метод, который возвращает страницу с выбором
+    :param word:
+    :return:
+    """
+    db = db_session.create_session()
+    query = list(db.query(Word).filter(Word.word == word))
+    if len(query) == 0 or len(query[0].all_information) == 0:
+        return render_template('add_or_wiki_site.html', word=word)
+    else:
+        return search(word)
 
 
 @app.route('/information/<int:folder>', methods=['GET'])
