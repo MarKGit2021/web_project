@@ -12,7 +12,12 @@
 <div class="content_block" style="height: 60%; bottom: 20px;">
     <center><h1 style="font-size: 50px; font-family: 'Lobster', cursive;">Такая информация отсутствует</h1>
     <h2>Добавьте информацию или посмотрите из Википедии</h2></center>
+<!--    {% if current_user.is_authenticated %}-->
+    {% if is_authenticated %}
     <a href="add-inf/{{ word }}"><button style="left: 20%; top: 30%; width: 20%; height: 10%; border-color: greenyellow; position: absolute;">Добавить информацию</button></a>
+    {% else %}
+    <a href="/login"><button style="left: 20%; top: 30%; width: 20%; height: 10%; border-color: greenyellow; position: absolute;">Добавить информацию</button></a>
+    {% endif %}
     <a href="wi-inf/{{ word }}"><button style="right: 20%;top: 30%; width: 20%; height: 10%; border-color: greenyellow; position:
     absolute;">Посмотреть из Википедии</button></a>
 </div>

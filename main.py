@@ -62,13 +62,13 @@ def all_information(information, db):
 def search_information(word):
     """
     Метод, который возвращает страницу с выбором
-    :param word:
+    :param word: str слово
     :return:
     """
     db = db_session.create_session()
     query = list(db.query(Word).filter(Word.word == word))
     if len(query) == 0 or len(query[0].all_information) == 0:
-        return render_template('add_or_wiki_site.html', word=word)
+        return render_template('add_or_wiki_site.html', word=word, is_authenticated=False)
     else:
         return search(word)
 
@@ -91,9 +91,12 @@ def get_information(folder):
 
 @app.route('/', methods=['GET', 'POST'])
 def main_func():
+    """
+    Метод, который обрабатывает главную страницу + поле поиска
+    :return: главная страница
+    """
     form = SearchForm()
     if form.validate_on_submit():
-        print('tytyt')
         return search(form.word.data)
     db = db_session.create_session()
     top_information = get_top_information(db)
