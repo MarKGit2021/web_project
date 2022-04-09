@@ -1,0 +1,42 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+</head>
+<body>
+  <div class="content_block", style="font-family: 'Lobster', cursive;">
+    <h1 style="font-size: 50px; 
+        font-family: 'Lobster', cursive;">Добавить информацию</h1>
+    <p>Заполните форму. Добавьте информацию или загрузите файл</p><br>
+    <div style="height: 100%; position: absolute; left: 10%;right: 10%;">
+    <form  action="" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+                                    <label for="photo">Выберите файл</label>
+                                    <input type="file" class="form-control-file" id="photo" name="file">
+                                </div>
+    <label for="photo">Выберите файл</label><br>
+    <input type="file" class="form-control-file" id="photo" name="file1" style="left: 10%; height: 10%; border-color: greenyellow;">
+        {{ form.hidden_tag() }}
+        <br><p style="font-family: 'Lobster', cursive; left: 10%">{{ form.word.label }}</p>
+        {{ form.word(class="form-control", style="border-color: greenyellow; left: 10%; right: 10%; width: 100%;") }}<br>
+        <p>{{ form.words.label }}</p>
+        <p>{{ form.words(class="form-control", style="border-color: greenyellow; left: 10%; right: 10%; width: 100%;") }}</p><br>
+        {{ form1.hidden_tag() }}
+            <p>{{ form1.text.label }}</p>
+            <p  style="border-color: greenyellow; height: 50%;">{{ form1.text(class="form-control", class="search_area", style="border-color: greenyellow; width: 100%;") }}</p>
+            <p>{{ form1.submit(type="submit", class="search_area", style="border-color: greenyellow;") }}</p><br>
+              <p style="border-color: greenyellow; left: 10%; width: 20%; height: 10%;">{{ form.submit(type="submit", style="border-color: greenyellow;") }}</p><br>
+                {% for i in errors %}
+                <p class="error">{{ i }}</p>
+                {% endfor %}
+        </form>
+      </div>
+  </div>
+
+</body>
+</html>
+{% endblock %}

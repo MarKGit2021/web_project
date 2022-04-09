@@ -1,4 +1,4 @@
-from flask import render_template, Flask
+from flask import render_template, Flask, request
 from flask_login import LoginManager
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
@@ -8,6 +8,7 @@ from data.information import Information
 from data.words import Word
 from func.address_created import *
 from forms.search_form import SearchForm
+from forms.add_form import AddForm, AddTextForm
 from func.top_information import get_top_information
 
 db_session.global_init('db/db.db')
@@ -37,11 +38,33 @@ def search(word: str):
         return all_information(information, db)
 
 
-# def add_new_information():
-#         new_word = Word()
-#         new_word.word = word.strip()
-#         db.add(new_word)
-#         db.commit()
+@app.route('/add-new', methods=['POST', 'GET'])
+def add_new_information():
+    form = AddForm()
+    form1 = AddTextForm()
+    error = []
+    flag = True
+    text = ''
+    if request.method == 'POST':
+        if form.is_submitted():
+            if form1.is_submitted():
+                if form1.text.data.strip() != '':
+                    flag = False
+                    text = form1.text.data.strip()
+            if flag:
+                f = request.files['file']
+                text = f.read().strip()
+            word = form.word.data
+            words = form.words
+            return redirect(f'/search/{word}')
+    return render_template('add_information.html', form=form, form1=form1, errors=error)
+
+    # db = db_session.create_session()
+    # new_word = Word()
+    # new_word.word = word.strip()
+    # db.add(new_word)
+    # db.commit()
+
 
 def all_information(information, db):
     """
