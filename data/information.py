@@ -69,9 +69,18 @@ class Information(SqlAlchemyBase):
          который будет, если вызывать из main
         :return: None
         """
-        with open(f'{folder}information_{self.id}.txt', 'w', encoding='utf-8') as file:
-            file.write(text.strip())
-        self.folder = f'./files/information_{self.id}.txt'
+        if type(text) == bytes:
+            text = str(text)[2:-1]
+        print(text)
+        text.strip().strip('<!DOCTYPE html>')
+        text = '''{% extends "get_information.html" %}
+{% block content_1 %}
+''' + text + '''
+{% endblock %}
+'''
+        with open(f'{folder}information_{self.id}.html', 'w', encoding='utf-8') as file:
+            file.write(text)
+        self.folder = f'./files/information_{self.id}.html'
 
     def append_word(self, word: Word, db):
         """
