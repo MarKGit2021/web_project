@@ -87,6 +87,12 @@ def add_new_information():
 
 @app.route('/my-office', methods=["POST", "GET"])
 def office():
+    """
+    Метод, который обрабатывает токины пользователя и показывает его личный кабинет
+    :return:
+    """
+    # if not current_user.is_authenticated:
+    #     return redirect('/login')
     db = db_session.create_session()
     current_user = db.query(User).first()
     form = NewTokenForm()
