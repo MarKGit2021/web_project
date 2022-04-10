@@ -10,7 +10,7 @@ def add_information(db, text, word: str, user_id: int, words: str = None):
         words = []
     else:
         words = words.strip().lower().split('; ')
-    db = db_session.create_session()
+    # db = db_session.create_session()
     information = Information()
     information.user_id = user_id
     db.add(information)

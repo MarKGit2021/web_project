@@ -4,9 +4,13 @@ from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
 from data import db_session
+from data.api_token import APIToken
 from data.information import Information
+from data.users import User
 from data.words import Word
 from forms.add_complaints import AddComplaint
+from forms.new_token import NewTokenForm
+from func.add_token import add_token
 from func.address_created import *
 from func.add_information import add_information
 from func.add_complaint import new_complaint
@@ -79,6 +83,28 @@ def add_new_information():
                 print(word, 6)
                 return redirect(f'/search/{word}')
     return render_template('add_information.html', form=form, errors=error)
+
+
+@app.route('/my-office', methods=["POST", "GET"])
+def office():
+    db = db_session.create_session()
+    current_user = db.query(User).first()
+    form = NewTokenForm()
+    old_token = db.query(APIToken).filter(APIToken.is_blocked == False, APIToken.user_id == 1)  # current_user.id)[0]
+    if len(list(old_token)) == 0:
+        print(*db.query(APIToken).all())
+        old_token = add_token(db, current_user.id)
+    else:
+        old_token = old_token[0]
+    print(form.is_submitted())
+    if form.is_submitted():
+        old_token.is_blocked = True
+        db.commit()
+        api_token = add_token(db, current_user.id)
+        print('tyt')
+        return redirect('/my-office')
+    return render_template('private_office.html', **current_user.get_user_information(),
+                           token=old_token.token, form=form)
 
 
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])

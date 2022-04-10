@@ -29,6 +29,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     information = orm.relation("Information", back_populates='user')
     comments = orm.relation("Comment", back_populates='user')
     queries = orm.relation('OldQueries', back_populates='user')
+    tokens = orm.relation('APIToken', back_populates='user')
 
     def check_password(self, password) -> bool:
         """
@@ -56,6 +57,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             'name': self.name,
             'surname': self.surname,
             'points': self.points,
+            'user_email': self.email,
             'modified_date': self.modified_date,
             'type': self.type_of_user
             }
