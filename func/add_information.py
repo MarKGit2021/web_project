@@ -1,4 +1,3 @@
-import sqlalchemy
 from sqlalchemy import exc
 
 from data.information import Information

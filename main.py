@@ -6,8 +6,10 @@ from werkzeug.utils import redirect
 from data import db_session
 from data.information import Information
 from data.words import Word
+from forms.add_complaints import AddComplaint
 from func.address_created import *
 from func.add_information import add_information
+from func.add_complaint import new_complaint
 from forms.search_form import SearchForm
 from forms.add_form import AddForm
 from func.top_information import get_top_information
@@ -39,7 +41,10 @@ def search(word: str):
     else:
         return all_information(information, db)
 
+
 a = True
+
+
 @app.route('/add-new', methods=['POST', 'GET'])
 def add_new_information():
     """
@@ -65,7 +70,8 @@ def add_new_information():
                     f = request.files['file']
                     text = f.read().strip()
                     if str(text)[2:-1].strip() == '':
-                        return render_template('add_information.html', form=form, errors=['Выберите файл или введите информацию!'])
+                        return render_template('add_information.html', form=form,
+                                               errors=['Выберите файл или введите информацию!'])
                 word = form.word.data
                 words = form.words.data
                 # user_id = current_user.id
@@ -74,11 +80,19 @@ def add_new_information():
                 return redirect(f'/search/{word}')
     return render_template('add_information.html', form=form, errors=error)
 
-    # db = db_session.create_session()
-    # new_word = Word()
-    # new_word.word = word.strip()
-    # db.add(new_word)
-    # db.commit()
+
+@app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
+def add_complaints(object_id):
+    form = AddComplaint()
+    print('tyt', form.is_submitted())
+    if form.is_submitted():
+        print('tyt1')
+        text = form.text.data
+        # user_id = current_user.id
+        user_id = 1
+        new_complaint(db=db_session.create_session(), text=text, object_id=object_id, user_id=user_id)
+        return redirect('/')
+    return render_template('add_complaints.html', form=form)
 
 
 def all_information(information, db):
@@ -127,8 +141,8 @@ def get_information(folder):
     information = db.query(Information).filter(Information.id == information_id)
     if len(list(information)) == 0:
         abort(404)
-    print(information[0].folder)
-    return render_template(information[0].folder, **information[0].get_information(), site='/')
+    print(information[0].text)
+    return render_template(information[0].text, **information[0].get_information(), site='/')
 
 
 @app.route('/', methods=['GET', 'POST'])
