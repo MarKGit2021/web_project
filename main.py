@@ -35,13 +35,14 @@ def search(word: str):
     db = db_session.create_session()
     words = db.query(Word).filter(Word.word == word.strip())
     print(word)
+    db.close()
     if len(list(words)) == 0:
         return redirect(f'/search/{word}')
     information = words[0].all_information
     if len(information) == 0:
         return redirect(f'/search/{word}')
     elif len(information) == 1:
-        return redirect(f'/information/{address_created(information[0].id)}')
+        return redirect(f'/information/{address_created(information[0].information_id)}')
     else:
         return all_information(information, db)
 
@@ -81,7 +82,7 @@ def add_new_information():
                 # user_id = current_user.id
                 add_information(db=db_session.create_session(), word=word, user_id=1, words=words, text=text)
                 print(word, 6)
-                return redirect(f'/search/{word}')
+                return redirect(f'/search/{word.lower()}')
     return render_template('add_information.html', form=form, errors=error)
 
 
@@ -108,7 +109,9 @@ def office():
         db.commit()
         api_token = add_token(db, current_user.id)
         print('tyt')
+        db.close()
         return redirect('/my-office')
+    db.close()
     return render_template('private_office.html', **current_user.get_user_information(),
                            token=old_token.token, form=form)
 
@@ -138,7 +141,7 @@ def all_information(information, db):
                                                                       == x.information_id
                                                                       )[0].get_information(),
                                information))
-    print(inf_information)
+    db.close()
     return render_template('all_information.html', inf_information=inf_information)
 
 
@@ -153,8 +156,10 @@ def search_information(word):
     db = db_session.create_session()
     query = list(db.query(Word).filter(Word.word == word))
     if len(query) == 0 or len(query[0].all_information) == 0:
+        db.close()
         return render_template('add_or_wiki_site.html', word=word, is_authenticated=False)
     else:
+        db.close()
         print(word, 11)
         return search(word)
 
@@ -171,10 +176,11 @@ def get_information(folder):
     db = db_session.create_session()
     print(information_id)
     information = db.query(Information).filter(Information.id == information_id)
+    db.close()
     if len(list(information)) == 0:
         abort(404)
-    print(information[0].text)
-    return render_template(information[0].text, **information[0].get_information(), site='/')
+    print(information[0])
+    return render_template(information[0].folder, **information[0].get_information(), site='/')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -188,6 +194,7 @@ def main_func():
         return search(form.word.data.strip().lower())
     db = db_session.create_session()
     top_information = get_top_information(db)
+    db.close()
     return render_template('main.html', is_authenticated=False, form=form,
                            inf=top_information, len_form=len(top_information))
 

@@ -11,21 +11,24 @@
             position: absolute;
             height: 60px;
             border-color: greenyellow;
-            width: 100px;
+            width: 150px;
         }
     </style>
 </head>
 <body>
 <div class="content_block">
     <main role="main" class="container">
-        <center>
+        <meta http-equiv="Content-Type" content="text/html; charset=cp1251"><center>
+            <div>
     {% block content_1 %}
     {% endblock %}
-        </center>
+        </div></center>
+        <div style="font-size: 20px; font-family: 'Lobster', cursive;">
     <p class="font_block_lobster">Автор: {{ user_name }} {{user_surname }}</p>
     <p class="font_block_lobster">Дата создания: {{ modified_date }}</p>
     <p class="font_block_lobster">Комментарии: {{ number_of_comments }}</p>
     <a href="{{ site }}"><button class="search_comment_button">Открыть комментарии!</button></a>
+</div>
     </main>
 </div>
 

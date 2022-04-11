@@ -19,4 +19,5 @@ def new_complaint(db, text: str, object_id: int, user_id: int):
     new_comp.text = text
     db.add(new_comp)
     db.commit()
+    db.close()
     return True

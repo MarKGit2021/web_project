@@ -41,16 +41,25 @@ class Information(SqlAlchemyBase):
             text = file.read().strip()
         return text
 
+    def get_main_word(self):
+        try:
+            word = self.all_words[0].word
+            return word
+        except IndexError:
+            self.is_blocked = True
+            return
+            # Надо будет сделать либо логирование, либо системные сообщения об ошибках администраторам
+
     def get_information(self):
         """
                 Метод, который возвращает словарь, который можно легко вставить в html (render_template)
                 :return: dict
         """
         return {'user_name': self.user.name, 'user_surname': self.user.surname,
-                'error': self.is_blocked,
                 'modified_date': self.modified_date, 'points': self.points,
                 'number_of_comments': len(self.comments),
-                'main_word': self.all_words[0].word,
+                'main_word': self.get_main_word(),
+                'error': self.is_blocked,
                 'address': address_created(self.id)}
 
     def __str__(self):
@@ -70,9 +79,24 @@ class Information(SqlAlchemyBase):
         :return: None
         """
         if type(text) == bytes:
-            text = str(text)[2:-1]
+            # text = b'jhj'
+            print(text)
+            with open('prob.txt', 'wb') as file:
+                file.write(text)
+            with open('prob.txt', 'r', encoding='utf-8') as file:
+                text = file.read().strip()
         print(text)
-        text.strip().strip('<!DOCTYPE html>')
+        if '<!DOCTYPE' in text:
+            text = '>'.join(text.split('>')[1:]).strip()
+        else:
+            text = f'<p>{text}</p>'
+            text = text.replace('\n', '<br>')
+        # text = text.replace('\r', '')
+        text = text.replace('\\r', '')
+        text = text.replace('\\n', '')
+        text = text.replace('\\t', '')
+        text = ''.join(''.join(text.strip('\\r')).split('\\n'))
+        print(text)
         text = '''{% extends "get_information.html" %}
 {% block content_1 %}
 ''' + text + '''

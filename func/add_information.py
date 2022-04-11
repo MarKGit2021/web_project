@@ -15,7 +15,7 @@ def add_information(db, text, word: str, user_id: int, words: str = None):
     information.user_id = user_id
     db.add(information)
     db.commit()
-    print('tyt')
+    print('tyt', information.id)
     information.save_text(text)
     db.commit()
     for i in [word] + words:
@@ -31,4 +31,5 @@ def add_information(db, text, word: str, user_id: int, words: str = None):
                 new_word = db.query(Word).filter(Word.word == i.strip().lower())[0]
             information.append_word(new_word, db=db)
             db.commit()
+    db.close()
     return True
