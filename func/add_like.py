@@ -1,13 +1,11 @@
 from sqlalchemy import exc
 
-# from data.information import Information
 from data.likes import Like
-# from data import db_session
 
 
 def add_like(db, information, user_id):
-    # db = db_session.create_session()
-    information.points += 1
+    information.points = information.points + 1
+    db.commit()
     like = Like()
     like.user_id = user_id
     like.information_id = information.id
@@ -17,4 +15,3 @@ def add_like(db, information, user_id):
     except exc.IntegrityError:
         db.rollback()
     db.commit()
-    db.close()

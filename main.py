@@ -182,20 +182,23 @@ def get_information(folder):
     print(information_id)
     information = db.query(Information).filter(Information.id == information_id)
     current_user = db.query(User).first()
-    db.close()
     if len(list(information)) == 0:
+        db.close()
         abort(404)
     print(information[0])
     form = LikeCommentForm()
+    likes, is_liked = get_likes(db, information_id=information_id, user_id=current_user.id)
     if request.method == 'POST':
-        if form.submit1.data:
-            add_like(db_session.create_session(), user_id=current_user.id, information=information[0])
+        if form.submit1.data and not is_liked:
+            add_like(db, user_id=current_user.id, information=information[0])
         if form.submit.data:
             text = form.text.data
             print(text)
-            add_comment(db_session.create_session(), user_id=current_user.id, information_id=information_id, text=text)
+            add_comment(db, user_id=current_user.id, information_id=information_id, text=text)
+        db.close()
         return redirect(f'/information/{folder}')
-    likes, is_liked = get_likes(db_session.create_session(), information_id=information_id, user_id=current_user.id)
+    db.close()
+    print(is_liked, 'is_liked')
     return render_template(information[0].folder, **information[0].get_information(), site='/', site1='/',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id))

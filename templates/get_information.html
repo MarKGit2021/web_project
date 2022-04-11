@@ -32,7 +32,11 @@
     <div>
         <form action="" method="post" name="name">
         {{ name1.hidden_tag() }}
-        <p style="width: 20%; height: 60px;">{{ name1.submit1(type="submit", style="border-color: greenyellow; width: 100px; height: 60px;") }}</p>
+            {% if is_liked %}
+        <p style="width: 20%; height: 60px;">{{ name1.submit1(type="submit", style="border-color: greenyellow; width: 100px; height: 60px; background-color: #98ff98;") }}</p>
+        {% else %}
+        <p style="width: 20%; height: 60px;">{{ name1.submit1(type="submit", style="border-color: greenyellow; width: 100px; height: 60px; ") }}</p>
+        {% endif %}
     </form>
 
     {% if current_user.type == 2 %}

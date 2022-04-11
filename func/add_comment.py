@@ -13,4 +13,4 @@ def add_comment(db, text: str, information_id: int, user_id: int):
     comment.user_id = user_id
     db.add(comment)
     db.commit()
-    db.close()
+    # db.close()
