@@ -69,41 +69,48 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     def __repr__(self):
         return f'Пользователь(id: {self.id})'
 
-    def click_like(self, information_id, db):
+    def click_like(self, information, db) -> int:
         """
         Метод, который можно вызвать при нажатии пользователем на лайк:
         если лайк уже был нажат, то он удаляется. Если его не было, он создается
-        :param information_id: int
+        :param information: information
         :param db: база, с которой работаем
         :return: bool - закрашивать лайк или нет.
         """
-        if self.check_like(information_id, db):
-            db.delete(db.query(Like).filter(Like.information_id == information_id,
-                                            Like.user_id == self.id))
+        # if information.user_id == self.id:
+        #     return 0
+        if self.check_like(information.id, db):
+            db.delete(db.query(Like).filter(Like.information_id == information.id,
+                                            Like.user_id == self.id)[0])
+            self.new_point(-1)
             db.commit()
-            return False
+            return -1
         like = Like()
         like.user_id = self.id
-        like.information_id = information_id
-        db.add(Like)
+        like.information_id = information.id
+        print(like)
+        self.new_point()
+        db.add(like)
         db.commit()
-        return True
+        return 1
 
-    def check_like(self, information_id, db):
+    def check_like(self, information_id: int, db):
         """
         Метод, который проверяет, ставил ли пользователь лайк на эту страничку
         :param information_id: int
         :param db: база, с которой работаем
         :return: bool, закрашивать лайк или нет
         """
-        return len(db.query(Like).filter(Like.information_id == information_id,
-                                         Like.user_id == self.id)) == 0
+        return len(list(db.query(Like).filter(Like.information_id == information_id,
+                                         Like.user_id == self.id))) != 0
 
-    def new_point(self):
+    def new_point(self, value: int = 1):
         """
         Метод, который увеличивает количество лайков и проверяет, когда нужно повысить уровень пользователя
         :return: None
         """
-        self.points += 1
-        if self.points == POINTS_CONST:
+        self.points += value
+        if self.points >= POINTS_CONST:
             self.type_of_user = 1
+        else:
+            self.type_of_user = 0

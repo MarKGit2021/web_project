@@ -8,7 +8,6 @@
     <style type="text/css">
         .search_comment_button{
             font-family: 'Lobster', cursive;
-            position: absolute;
             height: 60px;
             border-color: greenyellow;
             width: 150px;
@@ -44,9 +43,10 @@
     <a href="{{ site }}"><button class="search_comment_button">Удалить работу</button></a>
         {% endif %}
     {% if current_user.type_of_user > 0 %}
-    <a href="{{ site1 }}"><button class="search_comment_button">Править работу</button></a>
+    <a href="{{ site1 }}"><button style="left: 200px; top: 60px;" class="search_comment_button">Править работу</button></a>
     {% endif %}
 </div>
+<div>
 {% endif %}
     {% if is_authenticated %}
     <form action="" method="post" name="name1">
@@ -68,7 +68,7 @@
             </p><br>
             {% endfor %}
         </div>
-    </form>
+    </form></div>
     {% endif %}</div>
     </main>
 </div>

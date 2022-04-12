@@ -12,7 +12,6 @@ from forms.like_comment import LikeCommentForm
 from forms.add_complaints import AddComplaint
 from forms.new_token import NewTokenForm
 from func.add_comment import add_comment
-from func.add_like import add_like
 from func.add_token import add_token
 from func.address_created import *
 from func.add_information import add_information
@@ -39,7 +38,6 @@ def search(word: str):
     """
     db = db_session.create_session()
     words = db.query(Word).filter(Word.word == word.strip())
-    print(word)
     db.close()
     if len(list(words)) == 0:
         return redirect(f'/search/{word}')
@@ -86,7 +84,6 @@ def add_new_information():
                 words = form.words.data
                 # user_id = current_user.id
                 add_information(db=db_session.create_session(), word=word, user_id=1, words=words, text=text)
-                print(word, 6)
                 return redirect(f'/search/{word.lower()}')
     return render_template('add_information.html', form=form, errors=error)
 
@@ -102,18 +99,16 @@ def office():
     db = db_session.create_session()
     current_user = db.query(User).first()
     form = NewTokenForm()
-    old_token = db.query(APIToken).filter(APIToken.is_blocked == False, APIToken.user_id == 1)  # current_user.id)[0]
+    old_token = db.query(APIToken).filter(APIToken.is_blocked == False,
+                                          APIToken.user_id == 1)  # current_user.id)[0]
     if len(list(old_token)) == 0:
-        print(*db.query(APIToken).all())
         old_token = add_token(db, current_user.id)
     else:
         old_token = old_token[0]
-    print(form.is_submitted())
     if form.is_submitted():
         old_token.is_blocked = True
         db.commit()
         api_token = add_token(db, current_user.id)
-        print('tyt')
         db.close()
         return redirect('/my-office')
     db.close()
@@ -124,9 +119,7 @@ def office():
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
 def add_complaints(object_id):
     form = AddComplaint()
-    print('tyt', form.is_submitted())
     if form.is_submitted():
-        print('tyt1')
         text = form.text.data
         # user_id = current_user.id
         user_id = 1
@@ -152,7 +145,6 @@ def all_information(information, db):
 
 @app.route('/search/<word>', methods=['GET'])
 def search_information(word):
-    print(word, 8)
     """
     Метод, который возвращает страницу с выбором
     :param word: str слово
@@ -165,7 +157,6 @@ def search_information(word):
         return render_template('add_or_wiki_site.html', word=word, is_authenticated=False)
     else:
         db.close()
-        print(word, 11)
         return search(word)
 
 
@@ -179,27 +170,33 @@ def get_information(folder):
     """
     information_id = get_id_for_address(folder)
     db = db_session.create_session()
-    print(information_id)
     information = db.query(Information).filter(Information.id == information_id)
     current_user = db.query(User).first()
     if len(list(information)) == 0:
         db.close()
         abort(404)
-    print(information[0])
+    else:
+        information = information[0]
     form = LikeCommentForm()
-    likes, is_liked = get_likes(db, information_id=information_id, user_id=current_user.id)
+    is_liked = current_user.check_like(db=db, information_id=information_id)
+    print(is_liked, 'is_liked')
+    likes = get_likes(db, information_id=information_id)
     if request.method == 'POST':
-        if form.submit1.data and not is_liked:
-            add_like(db, user_id=current_user.id, information=information[0])
+        if form.submit1.data:
+            # add_like(db, user_id=current_user.id, information=information[0])
+            flag = current_user.click_like(information=information, db=db)
+            print(current_user.points, information.points)
+            information.points += flag
+            print(information.points)
+            db.commit()
         if form.submit.data:
             text = form.text.data
-            print(text)
             add_comment(db, user_id=current_user.id, information_id=information_id, text=text)
         db.close()
         return redirect(f'/information/{folder}')
+    inf = information.get_information()
     db.close()
-    print(is_liked, 'is_liked')
-    return render_template(information[0].folder, **information[0].get_information(), site='/', site1='/',
+    return render_template(information.folder, **inf, site='/', site1='/',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id))
 
