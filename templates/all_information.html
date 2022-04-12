@@ -53,7 +53,7 @@
         {% for inf in inf_information %}
             <tr>
               <td class="alert alert-success"><a href="../information/{{ inf['address'] }}">{{ inf["points"] }}</a></td>
-              <td class="alert alert-secondary"><a href="../information/{{ inf['address'] }}">{{ inf["main_word"].word }}</a></td>
+              <td class="alert alert-secondary"><a href="../information/{{ inf['address'] }}">{{ inf["main_word"] }}</a></td>
               <td class="alert alert-secondary"><a href="../information/{{ inf['address'] }}">{{ inf["user_name"] }} {{ inf["user_surname"] }}</a></td>
             </tr>
         {% endfor %}

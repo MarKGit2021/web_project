@@ -43,7 +43,7 @@ class Information(SqlAlchemyBase):
 
     def get_main_word(self):
         try:
-            word = self.all_words[0].word
+            word = self.all_words[0].word.word
             return word
         except IndexError:
             self.is_blocked = True

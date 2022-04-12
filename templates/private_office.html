@@ -55,11 +55,19 @@
         top: 0; bottom: 0;
         padding: 5px;
         color: black;" href="information/{{ i['address'] }}">{{ i["modified_date"] }}</a></td>
+                {% if i["error"] %}
                 <td class="table-light"><a style="position: absolute;
         left: 0; right: 0;
         top: 0; bottom: 0;
         padding: 5px;
-        color: black;" href="information/{{ i['address'] }}">{{ i["main_word"].word }}</a></td>
+        color: black;" href="information/{{ i['address'] }}">Данная информация заблокирована</a></td>
+                {% else %}
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ i['address'] }}">{{ i["main_word"] }}</a></td>
+                {% endif %}
                 <td class="table-light"><a style="position: absolute;
         left: 0; right: 0;
         top: 0; bottom: 0;
