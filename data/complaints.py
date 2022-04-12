@@ -14,6 +14,7 @@ class Complaints(SqlAlchemyBase):
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    is_reading = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     information = orm.relation('Information')
     user = orm.relation('User')
 

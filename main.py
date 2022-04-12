@@ -5,12 +5,14 @@ from werkzeug.utils import redirect
 
 from data import db_session
 from data.api_token import APIToken
+from data.complaints import Complaints
 from data.information import Information
 from data.users import User
 from data.words import Word
 from forms.like_comment import LikeCommentForm
 from forms.add_complaints import AddComplaint
 from forms.new_token import NewTokenForm
+from forms.read_complaint import ReadComplaint
 from func.add_comment import add_comment
 from func.add_token import add_token
 from func.address_created import *
@@ -205,6 +207,35 @@ def get_information(folder):
     return render_template(information.folder, **inf, site='/', site1='/',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id), folder=folder)
+
+
+@app.route('/complaint/<object_id>', methods=['POST', 'GET'])
+def get_complaint(object_id):
+    form = ReadComplaint()
+    db = db_session.create_session()
+    current_user = db.query(User).first()
+    complaint = db.query(Complaints).filter(Complaints.id == object_id)[0]
+    if form.is_submitted():
+        print(form.for_inf.data)
+        if form.submit.data:
+            if form.text.data.strip() != '':
+                complaint.text += f'''\n\n\tКомментарий администратора {current_user.name} {current_user.surname}\n''' \
+                                  + form.text.data
+                db.commit()
+        if form.submit1.data:
+            complaint.is_reading = True
+            db.commit()
+        if form.for_inf.data:
+            folder = address_created(complaint.information.id)
+            db.close()
+            return redirect(f"/information/{folder}")
+        db.close()
+        return redirect(f'/complaint/{object_id}')
+    name = complaint.user.name
+    surname = complaint.user.surname
+    print(complaint.is_reading, name)
+    db.close()
+    return render_template('get_complaint.html', user_name=name, user_surname=surname, complaint=complaint, form=form)
 
 
 @app.route('/', methods=['GET', 'POST'])
