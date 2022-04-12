@@ -211,9 +211,17 @@ def get_information(folder):
 
 @app.route('/complaint/<object_id>', methods=['POST', 'GET'])
 def get_complaint(object_id):
+    """
+    Метод, который отвечает за показ и обработку жалоб на информации (только для админов)
+    :param object_id: id жалобы (не вижу смысла шифровать, тк это только админам
+    :return:
+    """
     form = ReadComplaint()
     db = db_session.create_session()
     current_user = db.query(User).first()
+    if current_user.type_of_user != 2:
+        db.close()
+        abort(404)
     complaint = db.query(Complaints).filter(Complaints.id == object_id)[0]
     if form.is_submitted():
         print(form.for_inf.data)
