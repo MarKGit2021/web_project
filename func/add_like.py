@@ -3,6 +3,7 @@ from sqlalchemy import exc
 
 from data.likes import Like
 from data import db_session
+"""не используется"""
 
 from typing import TYPE_CHECKING
 

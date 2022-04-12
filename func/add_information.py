@@ -6,6 +6,15 @@ from data import db_session
 
 
 def add_information(db, text, word: str, user_id: int, words: str = None):
+    """
+    Метод, который добавляет информацию в базу данных
+    :param db: база
+    :param text: bytes or str - содержимое информации
+    :param word: str -главное слово для поиска
+    :param user_id: int - кто создал
+    :param words: Optional[str] - дополнительные слова
+    :return:
+    """
     if words is None:
         words = []
     else:

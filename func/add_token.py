@@ -1,11 +1,13 @@
-from sqlalchemy import exc
-
 from data.api_token import APIToken
-from data import db_session
 
 
 def add_token(db, user_id: int):
-    # db = db_session.create_session()
+    """
+    Метод, который содает и сохраняет новый токен
+    :param db: db
+    :param user_id: int
+    :return:
+    """
     new_token = APIToken()
     new_token.user_id = user_id
     db.add(new_token)

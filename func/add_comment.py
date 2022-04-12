@@ -6,7 +6,14 @@ from data.comments import Comment
 
 
 def add_comment(db, text: str, information_id: int, user_id: int):
-    # db = db_session.create_session()
+    """
+    Метод, добавляющий комментарий в базу
+    :param db: база
+    :param text: str - текст комментария
+    :param information_id:int - id информации, к которой добавляют
+    :param user_id: int - id, кто добавляет
+    :return:
+    """
     comment = Comment()
     comment.text = text
     comment.information_id = information_id

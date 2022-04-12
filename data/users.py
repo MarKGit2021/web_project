@@ -77,19 +77,18 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         :param db: база, с которой работаем
         :return: bool - закрашивать лайк или нет.
         """
-        # if information.user_id == self.id:
-        #     return 0
+        if information.user_id == self.id:
+            return 0
         if self.check_like(information.id, db):
             db.delete(db.query(Like).filter(Like.information_id == information.id,
                                             Like.user_id == self.id)[0])
-            self.new_point(-1)
+            information.user.new_point(-1)
             db.commit()
             return -1
         like = Like()
         like.user_id = self.id
         like.information_id = information.id
-        print(like)
-        self.new_point()
+        information.user.new_point()
         db.add(like)
         db.commit()
         return 1

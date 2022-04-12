@@ -118,6 +118,11 @@ def office():
 
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
 def add_complaints(object_id):
+    """
+    Метод, который обрабатывает добавление жалобы на определенную информацию
+    :param object_id: int - зашифрованное id
+    :return:
+    """
     form = AddComplaint()
     if form.is_submitted():
         text = form.text.data
