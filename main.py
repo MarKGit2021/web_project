@@ -215,9 +215,9 @@ def get_all_complaints():
     current_user = db.query(User).first()
     # if not current_user.is_authenticated:
     #     return redirect('/login')
-    # if current_user.type_of_user != 2:
-    #     db.close()
-    #     abort(404)
+    if current_user.type_of_user != 2:
+        db.close()
+        abort(404)
     complaints_information = get_complaints_information(db)
     db.close()
     return render_template('all_complaints.html', complaints=complaints_information)
