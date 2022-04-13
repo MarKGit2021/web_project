@@ -16,7 +16,7 @@ from data.information_by_word import InformationByWord
 class Word(SqlAlchemyBase):
     __tablename__ = 'words'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    word = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    word = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
     all_information = orm.relation("InformationByWord", back_populates='word')
 
     def __str__(self):
@@ -32,8 +32,11 @@ class Word(SqlAlchemyBase):
         :param db: База данных, с которой работаем.
         :return: None
         """
-        if db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
-                                              InformationByWord.information_id == information.id):
+        if len(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                                       InformationByWord.information_id == information.id))) != 0:
+            # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            # print(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                                          # InformationByWord.information_id == information.id)))
             return
         inf_by_word = InformationByWord()
         inf_by_word.word = self

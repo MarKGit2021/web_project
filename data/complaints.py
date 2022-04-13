@@ -13,18 +13,17 @@ class Complaints(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
-    folder = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    text = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    is_reading = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     information = orm.relation('Information')
     user = orm.relation('User')
 
     def get_complaints_text(self):
         """
-                Метод, который достает откуда-то текст комментария. Пока текст достается из файла по пути folder
+                Метод, который достает откуда-то текст комментария. Я решила, что жалобы можно хранить в бд
                 :return: пока str
         """
-        with open(self.folder, 'r', encoding='utf-8') as file:
-            text = file.read().strip()
-        return text
+        return self.text
 
     def get_complaints_information(self):
         """
@@ -34,7 +33,11 @@ class Complaints(SqlAlchemyBase):
         return {
             'text': self.get_complaints_text(),
             'user_name': self.user.name,
-            'user_surname': self.user.surname
+            'user_surname': self.user.surname,
+            'modified_date': self.modified_date,
+            'is_reading': self.is_reading,
+            'main_word': self.information.get_main_word(),
+            'id': self.id
             }
 
     def __str__(self):

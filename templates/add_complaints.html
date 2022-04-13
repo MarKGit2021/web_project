@@ -1,0 +1,22 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пожаловаться</title>
+</head>
+<body>
+<div class="content_block" style="font-display: 'Lobster', cursive; height: 50%;">
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+    <div style="left: 10%; right: 10%; position: absolute;">
+    <center><h1 style="font-size: 30px;">Жалоба</h1></center>
+    <p>Оставьте свою жалобу здесь. Укажите подробно, что не так.</p>
+        <p style="height: 30%;">{{ form.text(class="form-control", class="search_area", style="border-color: greenyellow; width: 100%; hight: 30") }}</p>
+        <p style="width: 20%; height: 10%;">{{ form.submit(type="submit", style="border-color: greenyellow;") }}</p>
+    </div></form>
+</div>
+</body>
+</html>
+{% endblock %}

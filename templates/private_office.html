@@ -1,0 +1,86 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style type="text/css">
+        table {
+        table-layout: fixed;
+        width: 100%;
+       }
+       td {
+        border: 1px solid #333;
+        padding: 5px;
+        position: relative;
+        height: 50px;
+       }
+    </style>
+</head>
+<body>
+<div class="content_block" style="font-family: 'Lobster', cursive;">
+    <div style="left: 10%; right: 10%; position: absolute;">
+    <center><h1>Личный кабинет</h1></center>
+    <h3>Имя: {{ name }}</h3>
+    <h3>Фамилия: {{ surname }}</h3>
+    <h3>Почта: {{ user_email }}</h3>
+    <h3>Профиль создан: {{ modified_date }}</h3>
+    {% if type == 0 %}
+    <h3>Статус пользователя: Базовый</h3>
+    {% elif type == 1 %}
+    <h3>Статус пользователя: Модератор</h3>
+    {% else %}
+    <h3>Статус пользователя: Администратор</h3>
+    {% endif %}
+    <h3>API-токен: {{ token }}</h3>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p style="width: 20%; height: 10%;">{{ form.submit(type="submit", class="btn btn-primary", class="border-color: greenyellow;") }}</p>
+    </form>
+        {% if type == 2 %}
+        <a href="/complaints"><button>Жалобы: {{ count }}</button></a>
+        {% endif %}
+    <center><h1>Работы</h1></center>
+    <table class="table">
+          <thead>
+            <tr class="table-active">
+              <th scope="col">Дата создания</th>
+              <th scope="col">Запрос</th>
+                <th scope="col">Количество лайков</th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for i in inf %}
+            <tr>
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ i['address'] }}">{{ i["modified_date"] }}</a></td>
+                {% if i["error"] %}
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ i['address'] }}">Данная информация заблокирована</a></td>
+                {% else %}
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ i['address'] }}">{{ i["main_word"] }}</a></td>
+                {% endif %}
+                <td class="table-light"><a style="position: absolute;
+        left: 0; right: 0;
+        top: 0; bottom: 0;
+        padding: 5px;
+        color: black;" href="information/{{ i['address'] }}">{{ i["points"] }}</a></td>
+            </tr>
+        {% endfor %}
+          </tbody>
+        </table>
+
+</div></div>
+</body>
+</html>{% endblock %}
