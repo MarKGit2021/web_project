@@ -33,7 +33,11 @@ class Complaints(SqlAlchemyBase):
         return {
             'text': self.get_complaints_text(),
             'user_name': self.user.name,
-            'user_surname': self.user.surname
+            'user_surname': self.user.surname,
+            'modified_date': self.modified_date,
+            'is_reading': self.is_reading,
+            'main_word': self.information.get_main_word(),
+            'id': self.id
             }
 
     def __str__(self):

@@ -21,6 +21,7 @@ from func.add_complaint import new_complaint
 from forms.search_form import SearchForm
 from forms.add_form import AddForm
 from func.get_comment import get_comment
+from func.get_complaints import get_complaints_information
 from func.get_likes import get_likes
 from func.top_information import get_top_information
 
@@ -207,6 +208,19 @@ def get_information(folder):
     return render_template(information.folder, **inf, site='/', site1='/',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id), folder=folder)
+
+@app.route('/complaints')
+def get_all_complaints():
+    db = db_session.create_session()
+    current_user = db.query(User).first()
+    # if not current_user.is_authenticated:
+    #     return redirect('/login')
+    # if current_user.type_of_user != 2:
+    #     db.close()
+    #     abort(404)
+    complaints_information = get_complaints_information(db)
+    db.close()
+    return render_template('all_complaints.html', complaints=complaints_information)
 
 
 @app.route('/complaint/<object_id>', methods=['POST', 'GET'])
