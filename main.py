@@ -209,6 +209,7 @@ def get_information(folder):
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id), folder=folder)
 
+
 @app.route('/complaints')
 def get_all_complaints():
     db = db_session.create_session()

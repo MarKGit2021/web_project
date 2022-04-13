@@ -37,7 +37,7 @@ class Information(SqlAlchemyBase):
         """
         if self.is_blocked:
             return 'Данная информация заблокирована оператором, тк она содержит нежелательный контент'
-        with open(self.folder, 'r', encoding='utf-8') as file:
+        with open(f"./templates/{self.folder[2:]}", 'r', encoding='utf-8') as file:
             text = file.read().strip()
         return text
 
@@ -60,7 +60,7 @@ class Information(SqlAlchemyBase):
                 'number_of_comments': len(self.comments),
                 'main_word': self.get_main_word(),
                 'error': self.is_blocked,
-                'address': address_created(self.id)}
+                'address': address_created(self.id), 'text': self.get_text_information()}
 
     def __str__(self):
         return f'Информация id: {self.id}; user_name: {self.user.name}; user_surname: {self.user.surname};' \
