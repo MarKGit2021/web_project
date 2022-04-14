@@ -8,3 +8,4 @@ class LikeCommentForm(FlaskForm):
     text = TextAreaField('Введите текст комментария', validators=[DataRequired()])
     submit = SubmitField('Отправить')
     submit1 = SubmitField('Нравится', id='submit1')
+    blocked = SubmitField('Заблокировать', id='blocked')

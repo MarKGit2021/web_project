@@ -203,13 +203,20 @@ def get_information(folder: int):
         if form.submit.data:
             text = form.text.data
             add_comment(db, user_id=current_user.id, information_id=information_id, text=text)
+        if form.blocked.data:
+            information.is_blocked = not information.is_blocked
+            db.commit()
         db.close()
         return redirect(f'/information/{folder}')
     inf = information.get_information()
     db.close()
-    return render_template(information.folder, **inf, site='/', site1=f'/edit/{folder}',
+    inf_folder = information.folder
+    if information.is_blocked:
+        inf_folder = 'blocked_information.html'
+    return render_template(inf_folder, **inf, site='/', site1=f'/edit/{folder}',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
-                           comment=get_comment(db_session.create_session(), information_id), folder=folder)
+                           comment=get_comment(db_session.create_session(), information_id),
+                           folder=folder, is_blocked=information.is_blocked)
 
 
 @app.route('/edit/<object_id>', methods=['POST', 'GET'])

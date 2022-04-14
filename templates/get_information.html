@@ -36,15 +36,15 @@
         {% else %}
         <p style="width: 20%; height: 60px;">{{ name1.submit1(type="submit", style="border-color: greenyellow; width: 100px; height: 60px; ") }}</p>
         {% endif %}
-    </form>
-    <a href="/add_complaint/{{ folder }}"><button class="search_comment_button" style="left: 120px; width: 200px; height: 60px; top: -55px;">Пожаловаться</button></a>
-    {% if current_user.type == 2 %}
+    <a href="/add_complaint/{{ folder }}"><button class="search_comment_button" style="left: 120px; width: 200px; height: 60px; top: -55px;">Пожаловаться</button></a><br>
+    {% if current_user.type_of_user == 2 %}
 
-    <a href="{{ site }}"><button class="search_comment_button">Заблокировать работу</button></a>
+    <p style="width: 20%; height: 60px;">{{ name1.blocked(type="submit", class="search_comment_button", style="border-color: greenyellow; width: 160px; height: 60px; ") }}</p>
         {% endif %}
-    {% if current_user.type_of_user > 0 %}
+    {% if current_user.type_of_user > 0 and not is_blocked %}
     <a href="{{ site1 }}"><button style="left: 200px; top: 60px;" class="search_comment_button">Править работу</button></a>
     {% endif %}
+    </form>
 </div>
 <div>
 {% endif %}
