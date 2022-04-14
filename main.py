@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
+from api import information_api
 from data import db_session
 from data.api_token import APIToken
 from data.complaints import Complaints
@@ -279,4 +280,5 @@ def main_func():
 
 if __name__ == '__main__':
     db_session.global_init("db/db.db")
+    app.register_blueprint(information_api.blueprint)
     app.run(port=8080, host='127.0.0.1')
