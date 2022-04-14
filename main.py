@@ -242,7 +242,7 @@ def edit_information(object_id: int):
     text = information.get_text_information()
     form = UpdateForm()
     # form.text.data = "123321123321"
-    if form.is_submitted():
+    if request.method == 'POST' and form.is_submitted():
         information.save_text(text=form.text.data)
         db.commit()
         db.close()
