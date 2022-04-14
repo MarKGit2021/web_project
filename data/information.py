@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import datetime
-import os
 
 import sqlalchemy
 from sqlalchemy import orm
@@ -13,6 +12,8 @@ if TYPE_CHECKING:
     from data.words import Word
 from data.information_by_word import InformationByWord
 from func.address_created import address_created
+
+from logger import logger
 
 
 class Information(SqlAlchemyBase):
@@ -51,10 +52,7 @@ class Information(SqlAlchemyBase):
         except IndexError as e:
             self.is_blocked = True
 
-            if not os.path.exists("log"):
-                os.mkdir("log")
-            with open(f"log/{str(datetime.datetime.now()).replace(':', '-')}.txt", "w") as logfile:
-                logfile.write(f"{self.id}\n{e}\n")
+            logger.log(id=self.id, error=e)
             return
 
     def get_information(self):

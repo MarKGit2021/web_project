@@ -33,7 +33,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def check_password(self, password) -> bool:
         """
-        Метод, который проверяет на правильность пароль
+        Метод, который проверяет на правильность пароль\n
         :param password: str
         :return: bool
         """
@@ -50,7 +50,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def get_user_information(self) -> dict:
         """
-        Метод, который возвращает словарь, который можно легко вставить в html (render_template)
+        Метод, который возвращает словарь, который можно легко вставить в html (render_template)\n
         :return: dct
         """
         return {
@@ -72,7 +72,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     def click_like(self, information, db) -> int:
         """
         Метод, который можно вызвать при нажатии пользователем на лайк:
-        если лайк уже был нажат, то он удаляется. Если его не было, он создается
+        если лайк уже был нажат, то он удаляется. Если его не было, он создается\n
         :param information: information
         :param db: база, с которой работаем
         :return: bool - закрашивать лайк или нет.
@@ -95,13 +95,13 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def check_like(self, information_id: int, db):
         """
-        Метод, который проверяет, ставил ли пользователь лайк на эту страничку
+        Метод, который проверяет, ставил ли пользователь лайк на эту страничку\n
         :param information_id: int
         :param db: база, с которой работаем
         :return: bool, закрашивать лайк или нет
         """
-        return len(list(db.query(Like).filter(Like.information_id == information_id,
-                                              Like.user_id == self.id))) != 0
+        return bool(list(db.query(Like).filter(Like.information_id == information_id,
+                                              Like.user_id == self.id)))
 
     def new_point(self, value: int = 1):
         """

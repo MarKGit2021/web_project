@@ -10,6 +10,8 @@ if TYPE_CHECKING:
     from data.information import Information
 from data.information_by_word import InformationByWord
 
+from logger import Logger
+
 
 # Этот класс, в принципе, тоже можно будет вырезать.
 # Он нужен для того, чтобы в случае многоразового использования слова использовать меньше памяти
@@ -32,11 +34,11 @@ class Word(SqlAlchemyBase):
         :param db: База данных, с которой работаем.
         :return: None
         """
-        if len(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
-                                                       InformationByWord.information_id == information.id))) != 0:
-            # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            # print(list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
-                                                          # InformationByWord.information_id == information.id)))
+        if list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                                       InformationByWord.information_id == information.id)):
+            info = list(db.query(InformationByWord).filter(InformationByWord.word_id == self.id,
+                                                           InformationByWord.information_id == information.id))
+            logger.log(id=self.id, info=info)
             return
         inf_by_word = InformationByWord()
         inf_by_word.word = self
