@@ -47,8 +47,9 @@ def add_new_information():
     db = db_session.create_session()
     try:
         user = db.query(APIToken).filter(APIToken.token ==
-                                         request.json['token'])[0].user
-    except TypeError:
+                                         request.json['token'])
+        user = list(user)[0].user
+    except IndexError:
         db.close()
         return jsonify({"status": "Bad", 'error': 'Token is not valid'}), 401
     add_information(db, word=request.json['word'], user_id=user.id, words=request.json['words'],
