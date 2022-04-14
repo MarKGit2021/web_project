@@ -15,7 +15,12 @@ blueprint = flask.Blueprint(
     )
 
 
-def search(word: str = None):
+def search(word: str):
+    """
+    Метод, который ищет всю информацию по слову
+    :param word: str, слово для поиска
+    :return:
+    """
     db = db_session.create_session()
     word = db.query(Word).filter(Word.word == word)
     if len(list(word)) == 0:
@@ -28,17 +33,31 @@ def search(word: str = None):
 
 @blueprint.route('/api/main_information/<word>', methods=['GET'])
 def get_information(word):
+    """
+    Метод, который возвращает информацию о статье по заданному слову.
+    :param word:
+    :return:
+    """
     information = search(word)
     return jsonify(information[max(information.keys())])
 
 
 @blueprint.route('/api/all_information/<word>', methods=['GET'])
 def get_all_information(word):
+    """
+    Возвращает все статьи по слову
+    :param word:
+    :return:
+    """
     return jsonify(search(word))
 
 
 @blueprint.route('/api/information', methods=['POST'])
 def add_new_information():
+    """
+    Добавляет информацию только если есть токен
+    :return:
+    """
     if not request.json:
         return jsonify({'error': 'Empty request'}), 400
     elif not all(key in request.json for key in
@@ -61,6 +80,11 @@ def add_new_information():
 
 @blueprint.route('/api/information/<object_id>', methods=['DELETE'])
 def blocking_information(object_id):
+    """
+    Блокирует информацию только если есть токен и пользователь администратор
+    :param object_id:
+    :return:
+    """
     if 'token' not in request.json:
         return jsonify({'error': 'Empty request'}), 400
     if len(str(object_id)) < 4:
