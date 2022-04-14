@@ -60,8 +60,8 @@ def search(word: str):
 a = True
 
 
-@app.route('/add-new', methods=['POST', 'GET'])
-def add_new_information():
+@app.route('/add-new/<word>', methods=['POST', 'GET'])
+def add_new_information(word):
     """
     Метод, который обрабатывает добавление информации.
     Если пользователь не залогинен, то его перенаправляют на страницу логина
@@ -176,7 +176,7 @@ def search_information(word):
 @app.route('/information/<int:folder>', methods=['GET', 'POST', 'PUT'])
 def get_information(folder: int):
     """
-    Метод, который выводит информацию пользователя. Адрес записывается как три рандомные цыфры + айди информации
+    Метод, который выводит информацию пользователя. Адрес записывается как три рандомные цифры + айди информации
     Если такой информации нет, он перенаправляет на страницу поиска (которой пока нет, поэтому на главную)
     :param folder: int число типа: xxxid
     :return: страницу html
@@ -308,7 +308,7 @@ def get_complaint(object_id):
     return render_template('get_complaint.html', user_name=name, user_surname=surname, complaint=complaint, form=form)
 
 
-@app.route("/search/wi-inf/<query>")
+@app.route("/wikipedia/<query>")
 def search_with_wikipedia(query):
     wiki_page = wikipedia.page(query)
     wiki_url = wiki_page.url
