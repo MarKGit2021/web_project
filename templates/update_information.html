@@ -1,0 +1,26 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Править</title>
+</head>
+<body>
+<div class="content_block" style="font-family: 'Lobster', cursive;">
+    <div style="left: 10%; right: 10%; width: 80%; position: absolute; height: 100%">
+        <h1>Править информацию</h1>
+        <h6 class="alert alert-danger">Скопируйте информацию в поле для ввода и редактируйте</h6>
+        <p>{{text}}</p>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>{{ form.text.label }}</p>
+            <p style="width: 100%; height: 50%;">{{ form.text(class="form-control", style="border-color: greenyellow; width: 100%; height: 100%;") }}</p>
+            <p style="width: 20%; height: 10%;">{{ form.submit(type="submit", style="border-color: greenyellow;") }}</p>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+{% endblock %}

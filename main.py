@@ -14,6 +14,7 @@ from forms.like_comment import LikeCommentForm
 from forms.add_complaints import AddComplaint
 from forms.new_token import NewTokenForm
 from forms.read_complaint import ReadComplaint
+from forms.update_information import UpdateForm
 from func.add_comment import add_comment
 from func.add_token import add_token
 from func.address_created import *
@@ -189,15 +190,15 @@ def get_information(folder):
         information = information[0]
     form = LikeCommentForm()
     is_liked = current_user.check_like(db=db, information_id=information_id)
-    print(is_liked, 'is_liked')
+    # print(is_liked, 'is_liked')
     likes = get_likes(db, information_id=information_id)
     if request.method == 'POST':
         if form.submit1.data:
             # add_like(db, user_id=current_user.id, information=information[0])
             flag = current_user.click_like(information=information, db=db)
-            print(current_user.points, information.points)
+            # print(current_user.points, information.points)
             information.points += flag
-            print(information.points)
+            # print(information.points)
             db.commit()
         if form.submit.data:
             text = form.text.data
@@ -206,9 +207,36 @@ def get_information(folder):
         return redirect(f'/information/{folder}')
     inf = information.get_information()
     db.close()
-    return render_template(information.folder, **inf, site='/', site1='/',
+    return render_template(information.folder, **inf, site='/', site1=f'/edit/{folder}',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id), folder=folder)
+
+
+@app.route('/edit/<object_id>', methods=['POST', 'GET'])
+def edit_information(object_id):
+    db = db_session.create_session()
+    current_user = db.query(User).first()
+    # if not current_user.is_authenticated:
+    #     return redirect('/login')
+    if current_user.type_of_user == 0:
+        db.close()
+        abort(404)
+    information_id = get_id_for_address(object_id)
+    information = db.query(Information).filter(Information.id == information_id)
+    if len(list(information)) == 0:
+        db.close()
+        abort(404)
+    information = information[0]
+    text = information.get_text_information()
+    form = UpdateForm()
+    # form.text.data = "123321123321"
+    if form.is_submitted():
+        information.save_text(text=form.text.data)
+        db.commit()
+        db.close()
+        return redirect(f'/information/{object_id}')
+    db.close()
+    return render_template('update_information.html', form=form, text=text)
 
 
 @app.route('/complaints')

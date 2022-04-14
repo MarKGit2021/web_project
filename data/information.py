@@ -39,6 +39,8 @@ class Information(SqlAlchemyBase):
             return 'Данная информация заблокирована оператором, тк она содержит нежелательный контент'
         with open(f"./templates/{self.folder[2:]}", 'r', encoding='utf-8') as file:
             text = file.read().strip()
+        text = text.strip('{% extends "get_information.'
+                          'html" %}').strip().strip('{% block content_1 %}').strip('{% endblock %}')
         return text
 
     def get_main_word(self):
@@ -89,8 +91,9 @@ class Information(SqlAlchemyBase):
         if '<!DOCTYPE' in text:
             text = '>'.join(text.split('>')[1:]).strip()
         else:
-            text = f'<p>{text}</p>'
-            text = text.replace('\n', '<br>')
+            if text.strip()[0] != '<':
+                text = f'<p>{text}</p>'
+                text = text.replace('\n', '<br>')
         # text = text.replace('\r', '')
         text = text.replace('\\r', '')
         text = text.replace('\\n', '')
