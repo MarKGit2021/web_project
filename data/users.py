@@ -6,9 +6,9 @@ from sqlalchemy import orm
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash
 
-from .likes import Like
+from likes import Like
 
-from .db_session import SqlAlchemyBase
+from db_session import SqlAlchemyBase
 
 POINTS_CONST = 5  # Сколько нужно лайков, чтобы стать модератором
 
@@ -22,7 +22,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False, index=True)
-    __hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    __hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
     type_of_user = sqlalchemy.Column(sqlalchemy.Integer, default=0)
@@ -37,7 +37,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         :param password: str
         :return: bool
         """
-        return self.__hashed_password == password
+        return self.__hashed_password == generate_password_hash(password)
 
     def set_password(self, password):
         """
@@ -101,7 +101,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         :return: bool, закрашивать лайк или нет
         """
         return len(list(db.query(Like).filter(Like.information_id == information_id,
-                                         Like.user_id == self.id))) != 0
+                                              Like.user_id == self.id))) != 0
 
     def new_point(self, value: int = 1):
         """
@@ -109,7 +109,4 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         :return: None
         """
         self.points += value
-        if self.points >= POINTS_CONST:
-            self.type_of_user = 1
-        else:
-            self.type_of_user = 0
+        self.type_of_user = int(self.points >= POINTS_CONST)
