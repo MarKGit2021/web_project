@@ -2,12 +2,8 @@ import flask
 from flask import jsonify, request
 
 from data.complaints import Complaints
-from data.information import Information
-from data.words import Word
 from data.api_token import APIToken
 from data import db_session
-from func.add_information import add_information
-from func.address_created import get_id_for_address
 
 blueprint = flask.Blueprint(
     'complaints_api',
@@ -26,13 +22,14 @@ def check_status(dct: dict, db, number: int = 2):
         return jsonify({"status": "Bad", 'error': 'Token is not valid'}), 401, False
     if token[0].user.type_of_user < number:
         return jsonify({"status": "Bad", 'error': 'Access is denied'}), 403, False
-    return True
+    return {}, 200, True
 
 
-@blueprint.route('api/complaints', methods=['GET'])
+@blueprint.route('/api/complaints', methods=['GET'])
 def get_all():
     db = db_session.create_session()
-    check = check_status(db=db, dct=request.json, )
+    check = check_status(db=db, dct=request.json)
+    print(check)
     if not check[-1]:
         return check[0], check[1]
     complaints = {i.id: i.get_complaints_information() for i in db.query(Complaints).all()}
@@ -40,14 +37,14 @@ def get_all():
     return jsonify(complaints), 200
 
 
-@blueprint.route('api/complaint/<object_id>', methods=['PUT'])
+@blueprint.route('/api/complaints/<object_id>', methods=['PUT'])
 def set_status(object_id):
     db = db_session.create_session()
     check = check_status(db=db, dct=request.json)
     if not check[-1]:
         db.close()
         return check[0], check[1]
-    if 'is_read' not in request.json:
+    if 'is_reading' not in request.json:
         db.close()
         return jsonify({"status": "Bad", 'error': 'Bad request'}), 400
     complaint = db.query(Complaints).filter(Complaints.id == object_id)
