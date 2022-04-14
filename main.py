@@ -192,7 +192,7 @@ def get_information(folder: int):
     is_liked = current_user.check_like(db=db, information_id=information_id)
     # print(is_liked, 'is_liked')
     likes = get_likes(db, information_id=information_id)
-    if request.method == 'POST':
+    if form.is_submitted():
         if form.submit1.data:
             # add_like(db, user_id=current_user.id, information=information[0])
             flag = current_user.click_like(information=information, db=db)
