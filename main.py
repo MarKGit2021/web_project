@@ -2,6 +2,8 @@ from flask import render_template, Flask, request, flash
 from flask_login import LoginManager
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
+import wikipedia
+import requests
 
 from api import information_api, complaints_api
 from data import db_session
@@ -31,9 +33,9 @@ db_session.global_init('db/db.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
-
 # login_manager = LoginManager()
 # login_manager.init_app(app)
+
 
 def search(word: str):
     """
@@ -304,6 +306,14 @@ def get_complaint(object_id):
     print(complaint.is_reading, name)
     db.close()
     return render_template('get_complaint.html', user_name=name, user_surname=surname, complaint=complaint, form=form)
+
+
+@app.route("/search/wi-inf/<query>")
+def search_with_wikipedia(query):
+    wiki_page = wikipedia.page(query)
+    wiki_url = wiki_page.url
+    wiki_html = requests.get(url=wiki_url).text
+    return wiki_html
 
 
 @app.route('/', methods=['GET', 'POST'])
