@@ -59,7 +59,7 @@ def add_new_information():
     :return:
     """
     if not request.json:
-        return jsonify({'error': 'Empty request'}), 400
+        return jsonify({"status": "Bad", 'error': 'Empty request'}), 400
     elif not all(key in request.json for key in
                  ['text', 'token', 'word', 'words']):
         return jsonify({"status": "Bad", 'error': 'Bad request'}), 400
