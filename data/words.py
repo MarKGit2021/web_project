@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 from data.information_by_word import InformationByWord
 
 
-# Этот класс в принципе тоже можно будет вырезать.
-# Он нужен для того, чтобы в случае многоразового использования слова использовать меньще памяти
+# Этот класс, в принципе, тоже можно будет вырезать.
+# Он нужен для того, чтобы в случае многоразового использования слова использовать меньше памяти
 class Word(SqlAlchemyBase):
     __tablename__ = 'words'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

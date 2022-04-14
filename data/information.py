@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import datetime
+import os
 
 import sqlalchemy
 from sqlalchemy import orm
@@ -47,10 +48,14 @@ class Information(SqlAlchemyBase):
         try:
             word = self.all_words[0].word.word
             return word
-        except IndexError:
+        except IndexError as e:
             self.is_blocked = True
+
+            if not os.path.exists("log"):
+                os.mkdir("log")
+            with open(f"log/{str(datetime.datetime.now()).replace(':', '-')}.txt", "w") as logfile:
+                logfile.write(f"{self.id}\n{e}\n")
             return
-            # Надо будет сделать либо логирование, либо системные сообщения об ошибках администраторам
 
     def get_information(self):
         """
