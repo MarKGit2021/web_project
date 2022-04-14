@@ -172,7 +172,7 @@ def search_information(word):
 
 
 @app.route('/information/<int:folder>', methods=['GET', 'POST', 'PUT'])
-def get_information(folder):
+def get_information(folder: int):
     """
     Метод, который выводит информацию пользователя. Адрес записывается как три рандомные цыфры + айди информации
     Если такой информации нет, он перенаправляет на страницу поиска (которой пока нет, поэтому на главную)
@@ -213,7 +213,12 @@ def get_information(folder):
 
 
 @app.route('/edit/<object_id>', methods=['POST', 'GET'])
-def edit_information(object_id):
+def edit_information(object_id: int):
+    """
+    Метод, отвечающий за редактирование информации
+    :param object_id: int - зашифрованное айди информации
+    :return:
+    """
     db = db_session.create_session()
     current_user = db.query(User).first()
     # if not current_user.is_authenticated:
@@ -241,6 +246,10 @@ def edit_information(object_id):
 
 @app.route('/complaints')
 def get_all_complaints():
+    """
+    Метод, который показывает все жалобы пользователей (нужно администраторам)
+    :return:
+    """
     db = db_session.create_session()
     current_user = db.query(User).first()
     # if not current_user.is_authenticated:

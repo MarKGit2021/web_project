@@ -20,7 +20,7 @@ class Information(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
     folder = sqlalchemy.Column(sqlalchemy.String)  # , nullable=False) - Пока информация сохраняется в файл,
-    # нужно, чтоюы в первый раз она сохранилась без пути
+    # нужно, чтобы в первый раз она сохранилась без пути
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'), nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
@@ -87,7 +87,6 @@ class Information(SqlAlchemyBase):
                 file.write(text)
             with open('prob.txt', 'r', encoding='utf-8') as file:
                 text = file.read().strip()
-        print(text)
         if '<!DOCTYPE' in text:
             text = '>'.join(text.split('>')[1:]).strip()
         else:
@@ -99,7 +98,6 @@ class Information(SqlAlchemyBase):
         text = text.replace('\\n', '')
         text = text.replace('\\t', '')
         text = ''.join(''.join(text.strip('\\r')).split('\\n'))
-        print(text)
         text = '''{% extends "get_information.html" %}
 {% block content_1 %}
 ''' + text + '''
