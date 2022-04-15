@@ -66,7 +66,7 @@ def add_new_information(word):
     Метод, который обрабатывает добавление информации.
     Если пользователь не залогинен, то его перенаправляют на страницу логина
     Пользователь может вставить файл, а может написать текст так.
-    В приоритете написанный текст - если он есть, то береться он, а не файл
+    В приоритете написанный текст - если он есть, то берется он, а не файл
     :return:
     """
     # if a:# пока нет логина
@@ -98,7 +98,7 @@ def add_new_information(word):
 @app.route('/my-office', methods=["POST", "GET"])
 def office():
     """
-    Метод, который обрабатывает токины пользователя и показывает его личный кабинет
+    Метод, который обрабатывает токены пользователя и показывает его личный кабинет\n
     :return:
     """
     # if not current_user.is_authenticated:
@@ -106,7 +106,7 @@ def office():
     db = db_session.create_session()
     current_user = db.query(User).first()
     form = NewTokenForm()
-    old_token = db.query(APIToken).filter(APIToken.is_blocked == False,
+    old_token = db.query(APIToken).filter(not APIToken.is_blocked,
                                           APIToken.user_id == 1)  # current_user.id)[0]
     if len(list(old_token)) == 0:
         old_token = add_token(db, current_user.id)
@@ -127,7 +127,7 @@ def office():
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
 def add_complaints(object_id):
     """
-    Метод, который обрабатывает добавление жалобы на определенную информацию
+    Метод, который обрабатывает добавление жалобы на определенную информацию\n
     :param object_id: int - зашифрованное id
     :return:
     """
@@ -165,7 +165,7 @@ def search_information(word):
     """
     db = db_session.create_session()
     query = list(db.query(Word).filter(Word.word == word))
-    if len(query) == 0 or len(query[0].all_information) == 0:
+    if not query or not query[0].all_information:
         db.close()
         return render_template('add_or_wiki_site.html', word=word, is_authenticated=False)
     else:

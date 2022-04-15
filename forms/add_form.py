@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class AddForm(FlaskForm):
-    word = StringField('Введите основное слово', validators=[DataRequired()])
-    words = StringField('Введите основные слова для поиска (формат: слово; слово)')
+    word = StringField('Введите название страницы', validators=[DataRequired()])
+    words = StringField('Введите ключевые слова для поиска (формат: слово; слово)')
     submit = SubmitField('Добавить')
-    text = TextAreaField('Введите информацию')
+    text = TextAreaField('Введите текст страницы')
