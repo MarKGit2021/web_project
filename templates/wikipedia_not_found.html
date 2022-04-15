@@ -1,0 +1,17 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск по Wikipedia</title>
+</head>
+<body>
+    <div class="content_block" style="height: 60%; bottom: 20px;">
+        <h1>{{ query }}</h1>
+        <h3>По Вашему запросу ничего не найдено.</h3>
+        <h3>Попробуйте перефразировать.</h3>
+    </div>
+</body>
+</html>
+{% endblock %}

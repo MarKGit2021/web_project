@@ -308,11 +308,15 @@ def get_complaint(object_id):
     return render_template('get_complaint.html', user_name=name, user_surname=surname, complaint=complaint, form=form)
 
 
-@app.route("/wikipedia/<query>")
+@app.route("/wiki/<query>")
 def search_with_wikipedia(query):
-    wiki_page = wikipedia.page(query)
-    wiki_url = wiki_page.url
-    wiki_html = requests.get(url=wiki_url).text
+    try:
+        wiki_page = wikipedia.page(query)
+    except wikipedia.DisambiguationError as e:
+        return render_template("wikipedia_titles.html", query=query, titles=e.options, len=len(e.options))
+    except wikipedia.PageError:
+        return render_template("wikipedia_not_found.html", query=query)
+    wiki_html = wiki_page.html()
     return wiki_html
 
 

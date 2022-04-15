@@ -1,0 +1,20 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск по Wikipedia</title>
+</head>
+<body>
+    <div class="content_block" style="height: {{ 100 * len / 25 }}%; bottom: 20px">
+        <h1>{{ query }}</h1>
+        <h3>Возможно, Вы имели ввиду одно из этих понятий:</h3>
+        {% for title in titles %}
+            <a href="/wiki/{{ title }}">{{ title }}</a>
+            <br>
+        {% endfor %}
+    </div>
+</body>
+</html>
+{% endblock %}
