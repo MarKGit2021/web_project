@@ -31,6 +31,19 @@ def search(word: str):
     return information
 
 
+def check_token(token, db):
+    """
+    Метод, проверяющий токен\n
+    :param token: str
+    :param db:
+    :return:
+    """
+    token = db.query(APIToken).filter(APIToken.token == token)
+    if len(list(token)) == 0:
+        return False, None, jsonify({"status": "Bad", 'error': 'Token is not valid'}), 401
+    return True, token[0].user.type_of_user, None, None
+
+
 @blueprint.route('/api/main_information/<word>', methods=['GET'])
 def get_information(word):
     """
@@ -38,6 +51,11 @@ def get_information(word):
     :param word:
     :return:
     """
+    db = db_session.create_session()
+    flag = check_token(request.headers.get('token'), db)
+    db.close()
+    if not flag[0]:
+        return flag[2], flag[3]
     information = search(word)
     return jsonify(information[max(information.keys())])
 
@@ -49,6 +67,11 @@ def get_all_information(word):
     :param word:
     :return:
     """
+    db = db_session.create_session()
+    flag = check_token(request.headers.get('token'), db)
+    db.close()
+    if not flag[0]:
+        return flag[2], flag[3]
     return jsonify(search(word))
 
 
@@ -61,12 +84,12 @@ def add_new_information():
     if not request.json:
         return jsonify({"status": "Bad", 'error': 'Empty request'}), 400
     elif not all(key in request.json for key in
-                 ['text', 'token', 'word', 'words']):
+                 ['text', 'word', 'words']) or request.headers.get('token') is None:
         return jsonify({"status": "Bad", 'error': 'Bad request'}), 400
     db = db_session.create_session()
     try:
         user = db.query(APIToken).filter(APIToken.token ==
-                                         request.json['token'])
+                                         request.headers.get('token'))
         user = list(user)[0].user
     except IndexError:
         db.close()
@@ -85,18 +108,15 @@ def blocking_information(object_id):
     :param object_id:
     :return:
     """
-    if 'token' not in request.json:
+    if request.headers.get('token') is None:
         return jsonify({'error': 'Empty request'}), 400
     if len(str(object_id)) < 4:
         return jsonify({"status": "Bad", 'error': 'Bad request'}), 400
     db = db_session.create_session()
-    try:
-        user = db.query(APIToken).filter(APIToken.token ==
-                                         request.json['token'])[0].user
-    except TypeError:
-        db.close()
-        return jsonify({"status": "Bad", 'error': 'Token is not valid'}), 401
-    if user.type_of_user != 2:
+    flag = check_token(request.headers['token'], db)
+    if not flag[0]:
+        return flag[2], flag[3]
+    if flag[1] != 2:
         db.close()
         return jsonify({"status": "Bad", 'error': 'Access is denied'}), 403
     information_id = get_id_for_address(object_id)
