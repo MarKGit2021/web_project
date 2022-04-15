@@ -311,7 +311,7 @@ def get_complaint(object_id):
 @app.route("/wiki/<query>")
 def search_with_wikipedia(query):
     try:
-        wiki_page = wikipedia.page(query)
+        wiki_page = wikipedia.page(title=query)
     except wikipedia.DisambiguationError as e:
         return render_template("wikipedia_titles.html", query=query, titles=e.options, len=len(e.options))
     except wikipedia.PageError:
@@ -340,4 +340,5 @@ if __name__ == '__main__':
     db_session.global_init("db/db.db")
     app.register_blueprint(information_api.blueprint)
     app.register_blueprint(complaints_api.blueprint)
+    wikipedia.set_lang("ru")
     app.run(port=8080, host='127.0.0.1')
