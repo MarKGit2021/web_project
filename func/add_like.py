@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 def add_like(db, information: Information, user_id: int):
-    information.points = information.points + 1
+    information.points += 1
     db.commit()
     like = Like()
     like.user_id = user_id

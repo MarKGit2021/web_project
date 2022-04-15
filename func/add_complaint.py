@@ -5,7 +5,7 @@ from func.address_created import get_id_for_address
 
 def new_complaint(db, text: str, object_id: int, user_id: int):
     """
-    Метод, который создает и сохраняет жалобу
+    Метод, который создает и сохраняет жалобу\n
     :param db: база данных
     :param text: str - текст жалобы
     :param object_id: int - id информации, на которую жалуются

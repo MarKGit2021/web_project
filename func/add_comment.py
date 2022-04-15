@@ -7,7 +7,7 @@ from data.comments import Comment
 
 def add_comment(db, text: str, information_id: int, user_id: int):
     """
-    Метод, добавляющий комментарий в базу
+    Метод, добавляющий комментарий в базу\n
     :param db: база
     :param text: str - текст комментария
     :param information_id:int - id информации, к которой добавляют

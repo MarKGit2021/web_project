@@ -7,7 +7,7 @@ from data import db_session
 
 def add_information(db, text, word: str, user_id: int, words: str = None):
     """
-    Метод, который добавляет информацию в базу данных
+    Метод, который добавляет информацию в базу данных\n
     :param db: база
     :param text: bytes or str - содержимое информации
     :param word: str -главное слово для поиска
@@ -18,7 +18,7 @@ def add_information(db, text, word: str, user_id: int, words: str = None):
     if words is None:
         words = []
     else:
-        words = words.strip().lower().split('; ')
+        words = words.strip().lower().split('; ')  # что будет, если скормить ему "слово; слово; "?
     # db = db_session.create_session()
     information = Information()
     information.user_id = user_id
@@ -28,7 +28,7 @@ def add_information(db, text, word: str, user_id: int, words: str = None):
     information.save_text(text)
     db.commit()
     for i in [word] + words:
-        if i.strip() != '':
+        if i.strip():
             new_word = Word()
             new_word.word = i.strip().lower()
             # db.add(new_word)

@@ -3,8 +3,8 @@ from data.comments import Comment
 
 def get_comment(db, information_id: int):
     """
-    Метод, достающий из бд информауию о комментариях
-    :param db: db
+    Метод, достающий из бд информауию о комментариях\n
+    :param db: База данных, с которой работаем
     :param information_id: int
     :return:
     """

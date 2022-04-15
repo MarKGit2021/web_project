@@ -8,8 +8,8 @@ from data.likes import Like
 
 def get_likes(db, information_id: int):
     """
-    Метод, выдающий количество лайков у информации
-    :param db:
+    Метод, выдающий количество лайков у информации\n
+    :param db: База данных, с которой работаем
     :param information_id:
     :return:
     """
