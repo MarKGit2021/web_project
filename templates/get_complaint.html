@@ -1,0 +1,32 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Жалоба номер {{ complaint.id }}</title>
+</head>
+<body>
+<div class="content_block">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+    <div style="left: 10%; right: 10%; position: absolute; width: 80%; font-family: 'Lobster', cursive;">
+        <h1>Жалоба номер {{ complaint.id }}</h1>
+        <h4>Была отправлена пользователем {{ user_name }} {{ user_surname }}</h4>
+        {% if complaint.is_reading %}
+        <p class="alert alert-warning">Жалоба была решена</p>
+        {% endif %}
+        <pre style="font-size: 15px;">{{ complaint.text }}</pre>
+        <p style="border-color: greenyellow; width: 20%; height: 10%;">{{ form.for_inf(type="submit", style="border-color: greenyellow;") }}</p>
+        <p>{{ form.text.label }}</p>
+        <p style="height: 30%; width: 100%;">{{ form.text(class="form-control", style="border-color: greenyellow; left: 10%; right: 10%; width: 80%; height: 30%") }}</p>
+        <p style="border-color: greenyellow; width: 20%; height: 10%;">{{ form.submit(type="submit", style="border-color: greenyellow;") }}</p>
+        <p style="border-color: greenyellow; width: 20%; height: 10%;">{{ form.submit1(type="submit", style="border-color: greenyellow;") }}</p>
+
+    </div></form>
+
+</div>
+
+</body>
+</html>
+{% endblock %}
