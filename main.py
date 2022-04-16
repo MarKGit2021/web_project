@@ -62,8 +62,8 @@ def search(word: str):
         return all_information(information, db)
 
 
-@app.route('/add-new', methods=['POST', 'GET'])
-def add_new_information():
+@app.route('/add-new/<word>', methods=['POST', 'GET'])
+def add_new_information(word):
     """
     Метод, который обрабатывает добавление информации.
     Если пользователь не залогинен, то его перенаправляют на страницу логина
@@ -133,6 +133,8 @@ def add_complaints(object_id):
     :param object_id: int - зашифрованное id
     :return:
     """
+    if not flask_login.current_user.is_authenticated:
+        return redirect('/login')
     form = AddComplaint()
     if form.is_submitted():
         text = form.text.data
@@ -193,9 +195,13 @@ def get_information(folder):
     else:
         information = information[0]
     form = LikeCommentForm()
-    is_liked = current_user.check_like(db=db, information_id=information_id)
+    is_liked = False
+    if current_user.is_authenticated:
+        is_liked = current_user.check_like(db=db, information_id=information_id)
     likes = get_likes(db, information_id=information_id)
     if request.method == 'POST':
+        if not current_user.is_authenticated:
+            return redirect(f'/information/{folder}')
         if form.submit1.data:
             # add_like(db, user_id=current_user.id, information=information[0])
             flag = current_user.click_like(information=information, db=db)
@@ -209,10 +215,14 @@ def get_information(folder):
         db.close()
         return redirect(f'/information/{folder}')
     inf = information.get_information()
+    type_of_user = 0
+    if current_user.is_authenticated:
+        type_of_user = current_user.type_of_user
     db.close()
     return render_template(information.folder, **inf, site='/', site1='/',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
-                           comment=get_comment(db_session.create_session(), information_id), folder=folder)
+                           comment=get_comment(db_session.create_session(), information_id),
+                           type_of_user=type_of_user, folder=folder)
 
 
 @app.route('/complaints')
