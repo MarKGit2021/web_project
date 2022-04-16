@@ -23,7 +23,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     points = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True, nullable=False, index=True)
-    hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    __hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now)
     type_of_user = sqlalchemy.Column(sqlalchemy.Integer, default=0)
@@ -33,10 +33,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     tokens = orm.relation('APIToken', back_populates='user')
 
     def set_password(self, password):
-        self.hashed_password = generate_password_hash(password)
+        self.__hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.hashed_password, password)
+        return check_password_hash(self.__hashed_password, password)
 
     def get_user_information(self) -> dict:
         """
@@ -50,7 +50,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             'user_email': self.email,
             'modified_date': self.modified_date,
             'type': self.type_of_user
-        }
+            }
 
     def __str__(self):
         return f'Пользователь с id: {self.id}; name: {self.name}; ' \
