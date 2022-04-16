@@ -12,12 +12,12 @@ blueprint = flask.Blueprint(
     )
 
 
-def check_status(dct: dict, db, number: int = 2):
+def check_status(dct: dict, db, number: int = 2, token=None):
     if not dct:
         return jsonify({"status": "Bad", 'error': 'Empty request'}), 400, False
-    if 'token' not in dct:
+    if token is None:
         return jsonify({"status": "Bad", 'error': 'Bad request'}), 400, False
-    token = db.query(APIToken).filter(APIToken.token == dct['token'])
+    token = db.query(APIToken).filter(APIToken.token == token)
     if len(list(token)) == 0:
         return jsonify({"status": "Bad", 'error': 'Token is not valid'}), 401, False
     if token[0].user.type_of_user < number:
@@ -28,8 +28,7 @@ def check_status(dct: dict, db, number: int = 2):
 @blueprint.route('/api/complaints', methods=['GET'])
 def get_all():
     db = db_session.create_session()
-    check = check_status(db=db, dct=request.json)
-    print(check)
+    check = check_status(db=db, dct={None: None}, token=request.headers.get('token'))
     if not check[-1]:
         return check[0], check[1]
     complaints = {i.id: i.get_complaints_information() for i in db.query(Complaints).all()}
@@ -37,10 +36,27 @@ def get_all():
     return jsonify(complaints), 200
 
 
+@blueprint.route('/api/complaints/<object_id>', methods=['GET'])
+def get_complaint_by_id(object_id):
+    db = db_session.create_session()
+    check = check_status(db=db, dct={None: None}, token=request.headers.get('token'))
+    if not check[-1]:
+        db.close()
+        return check[0], check[1]
+    complaint = db.query(Complaints).filter(Complaints.id == object_id)
+    if len(list(complaint)) == 0:
+        db.close()
+        return jsonify({"status": "Bad", "error": "Not Found"}), 404
+    complaint = complaint[0]
+    complaint = complaint.get_complaints_information()
+    db.close()
+    return jsonify(complaint)
+
+
 @blueprint.route('/api/complaints/<object_id>', methods=['PUT'])
 def set_status(object_id):
     db = db_session.create_session()
-    check = check_status(db=db, dct=request.json)
+    check = check_status(db=db, dct=request.json, token=request.headers.get('token'))
     if not check[-1]:
         db.close()
         return check[0], check[1]

@@ -119,9 +119,10 @@ def office():
         db.close()
         return redirect('/my-office')
     info = [i.get_information() for i in current_user.information]
+    token = old_token.token
     db.close()
     return render_template('private_office.html', **current_user.get_user_information(),
-                           token=old_token.token, form=form, inf=info)
+                           token=token, form=form, inf=info)
 
 
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
