@@ -52,11 +52,11 @@
 
     .login_block_button{
         font-family: 'Lobster', cursive;
-        position: absolute;
+        position: fixed;
         width: 100px;
         height: 40px;
         background-color: #008000;
-        left: 75px;
+        left: 75%;
         top: 20px;
     }
     .register_button{
@@ -92,13 +92,12 @@
         <div><h1 style="color: white" class="font_block_lobster">Название сайта!</h1></div>
     </a>
     {% if current_user.is_authenticated %}
-    <a class="navbar-brand" href="/my-office">{{ current_user.name }}</a>
-    <a class="btn btn-primary " href="/logout">Выйти</a>
+    <a href="/my-office"><button class="register_button" style="color: white">{{ current_user.name }}</button></a>
+    <a href="/logout"><button class="login_block_button" style="color: white">Выйти</button></a>
     {% else %}
-    <p>
-        <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-        <a class="btn btn-success" href="/login">Войти</a>
-    </p>
+        <a href="/register"><button class="register_button" style="color: white; font-size: 16px;">Зарегистрироваться</button></a>
+        <a href="/login"><button class="login_block_button" style="color: white; font-size: 16px;">Войти</button></a>
+
     {% endif %}
 </div>
 <!-- <div class="content_block"></div> -->
