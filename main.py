@@ -1,3 +1,4 @@
+import flask_login
 from flask import render_template, Flask, request, flash
 from flask_login import LoginManager, login_required, logout_user
 from werkzeug.exceptions import abort
@@ -31,14 +32,15 @@ db_session.global_init('db/db.db')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
 
 def search(word: str):
     """
@@ -60,9 +62,6 @@ def search(word: str):
         return all_information(information, db)
 
 
-a = True
-
-
 @app.route('/add-new', methods=['POST', 'GET'])
 def add_new_information():
     """
@@ -72,8 +71,8 @@ def add_new_information():
     В приоритете написанный текст - если он есть, то береться он, а не файл
     :return:
     """
-    # if a:# пока нет логина
-    #     return redirect('/login')
+    if not flask_login.current_user.is_authenticated:# пока нет логина
+        return redirect('/login')
     form = AddForm()
     error = []
     flag = True
@@ -92,8 +91,8 @@ def add_new_information():
                                                errors=['Выберите файл или введите информацию!'])
                 word = form.word.data
                 words = form.words.data
-                # user_id = current_user.id
-                add_information(db=db_session.create_session(), word=word, user_id=1, words=words, text=text)
+                add_information(db=db_session.create_session(), word=word, user_id=flask_login.current_user.id,
+                                words=words, text=text)
                 return redirect(f'/search/{word.lower()}')
     return render_template('add_information.html', form=form, errors=error)
 
@@ -104,10 +103,10 @@ def office():
     Метод, который обрабатывает токины пользователя и показывает его личный кабинет
     :return:
     """
-    # if not current_user.is_authenticated:
-    #     return redirect('/login')
+    current_user = flask_login.current_user
+    if not current_user.is_authenticated:
+        return redirect('/login')
     db = db_session.create_session()
-    current_user = db.query(User).first()
     form = NewTokenForm()
     old_token = db.query(APIToken).filter(APIToken.is_blocked == False,
                                           APIToken.user_id == 1)  # current_user.id)[0]
@@ -137,8 +136,7 @@ def add_complaints(object_id):
     form = AddComplaint()
     if form.is_submitted():
         text = form.text.data
-        # user_id = current_user.id
-        user_id = 1
+        user_id = flask_login.current_user.id
         new_complaint(db=db_session.create_session(), text=text, object_id=object_id, user_id=user_id)
         return redirect('/')
     return render_template('add_complaints.html', form=form)
@@ -170,7 +168,8 @@ def search_information(word):
     query = list(db.query(Word).filter(Word.word == word))
     if len(query) == 0 or len(query[0].all_information) == 0:
         db.close()
-        return render_template('add_or_wiki_site.html', word=word, is_authenticated=False)
+        return render_template('add_or_wiki_site.html', word=word,
+                               is_authenticated=flask_login.current_user.is_authenticated)
     else:
         db.close()
         return search(word)
@@ -187,7 +186,7 @@ def get_information(folder):
     information_id = get_id_for_address(folder)
     db = db_session.create_session()
     information = db.query(Information).filter(Information.id == information_id)
-    current_user = db.query(User).first()
+    current_user = flask_login.current_user
     if len(list(information)) == 0:
         db.close()
         abort(404)
@@ -195,7 +194,6 @@ def get_information(folder):
         information = information[0]
     form = LikeCommentForm()
     is_liked = current_user.check_like(db=db, information_id=information_id)
-    print(is_liked, 'is_liked')
     likes = get_likes(db, information_id=information_id)
     if request.method == 'POST':
         if form.submit1.data:
@@ -219,10 +217,10 @@ def get_information(folder):
 
 @app.route('/complaints')
 def get_all_complaints():
+    current_user = flask_login.current_user
+    if not current_user.is_authenticated:
+        return redirect('/login')
     db = db_session.create_session()
-    current_user = db.query(User).first()
-    # if not current_user.is_authenticated:
-    #     return redirect('/login')
     if current_user.type_of_user != 2:
         db.close()
         abort(404)
@@ -240,7 +238,7 @@ def get_complaint(object_id):
     """
     form = ReadComplaint()
     db = db_session.create_session()
-    current_user = db.query(User).first()
+    current_user = flask_login.current_user
     if current_user.type_of_user != 2:
         db.close()
         abort(404)
@@ -263,7 +261,6 @@ def get_complaint(object_id):
         return redirect(f'/complaint/{object_id}')
     name = complaint.user.name
     surname = complaint.user.surname
-    print(complaint.is_reading, name)
     db.close()
     return render_template('get_complaint.html', user_name=name, user_surname=surname, complaint=complaint, form=form)
 
@@ -280,12 +277,12 @@ def main_func():
     db = db_session.create_session()
     top_information = get_top_information(db)
     db.close()
-    return render_template('main.html', is_authenticated=False, form=form,
+    return render_template('main.html', is_authenticated=flask_login.current_user.is_authenticated, form=form,
                            inf=top_information, len_form=len(top_information))
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def reqister():
+def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -302,12 +299,13 @@ def reqister():
             email=form.email.data,
             surname=form.surname.data,
             hashed_password=form.password.data
-        )
+            )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -322,6 +320,7 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
 
 @app.route('/logout')
 @login_required
