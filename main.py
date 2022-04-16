@@ -103,13 +103,14 @@ def office():
     Метод, который обрабатывает токины пользователя и показывает его личный кабинет
     :return:
     """
+    db = db_session.create_session()
     current_user = flask_login.current_user
     if not current_user.is_authenticated:
+        db.close()
         return redirect('/login')
-    db = db_session.create_session()
     form = NewTokenForm()
     old_token = db.query(APIToken).filter(APIToken.is_blocked == False,
-                                          APIToken.user_id == 1)  # current_user.id)[0]
+                                          APIToken.user_id == current_user.id)  # current_user.id)[0]
     if len(list(old_token)) == 0:
         old_token = add_token(db, current_user.id)
     else:
@@ -120,10 +121,12 @@ def office():
         api_token = add_token(db, current_user.id)
         db.close()
         return redirect('/my-office')
-    info = [i.get_information() for i in current_user.information]
+    info = [i.get_information() for i in db.query(Information).filter(Information.user_id == current_user.id)]
+    token = old_token.token
+    user_information = current_user.get_user_information()
     db.close()
-    return render_template('private_office.html', **current_user.get_user_information(),
-                           token=old_token.token, form=form, inf=info)
+    return render_template('private_office.html', **user_information,
+                           token=token, form=form, inf=info)
 
 
 @app.route('/add_complaint/<int:object_id>', methods=['GET', 'POST'])
