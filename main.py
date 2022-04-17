@@ -1,12 +1,11 @@
 import flask_login
-from flask import render_template, Flask, request, flash
+from flask import render_template, Flask, request
 from flask_login import LoginManager, login_required, logout_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 from forms.login_form import LoginForm
 from flask_login import login_user
 import wikipedia
-import requests
 
 from api import information_api, complaints_api
 from data import db_session
@@ -45,6 +44,11 @@ login_manager.init_app(app)
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+@app.route('/site')
+def get_site_information():
+    return render_template('site_information.html')
 
 
 def search(word: str):
@@ -148,7 +152,7 @@ def add_complaints(object_id):
         text = form.text.data
         user_id = flask_login.current_user.id
         new_complaint(db=db_session.create_session(), text=text, object_id=object_id, user_id=user_id)
-        return redirect('/')
+        return redirect(f'/information/{object_id}')
     return render_template('add_complaints.html', form=form)
 
 
