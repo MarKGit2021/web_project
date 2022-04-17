@@ -188,9 +188,9 @@ def search_information(word):
 @app.route('/information/<int:folder>', methods=['GET', 'POST', 'PUT'])
 def get_information(folder: int):
     """
-    Метод, который выводит информацию пользователя. Адрес записывается как три рандомные цыфры + айди информации
-    Если такой информации нет, он перенаправляет на страницу поиска (которой пока нет, поэтому на главную)
-    :param folder: int число типа: xxxid
+    Метод, который выводит информацию пользователя. Адрес записывается как айди информации + три рандомные цифры
+    Если такой информации нет, он перенаправляет на страницу поиска (которой пока нет, поэтому на главную)\n
+    :param folder: int число типа: idxxx
     :return: страницу html
     """
     information_id = get_id_for_address(folder)
@@ -236,8 +236,7 @@ def get_information(folder: int):
     return render_template(inf_folder, **inf, site='/', site1=f'/edit/{folder}',
                            is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id),
-                           type_of_user=type_of_user, folder=folder,
-                           is_blocked=information.is_blocked)
+                           folder=folder, is_blocked=information.is_blocked, type_of_user=type_of_user)
 
 
 @app.route('/edit/<object_id>', methods=['POST', 'GET'])
