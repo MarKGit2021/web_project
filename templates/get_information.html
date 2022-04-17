@@ -63,7 +63,7 @@
             {% for i in comment %}
             <hr>
             <h7 style="font-size: 10px;">{{ i["modified_date"] }}</h7>
-            <h4>{{ i["user_name"] }}</h4>
+            <h4>{{ i["user_name"] }} {{ i["user_surname"] }}</h4>
             <p>
                 {{ i["text"]}}
             </p><br>
