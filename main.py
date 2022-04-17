@@ -3,7 +3,7 @@ from flask import render_template, Flask, request, flash
 from flask_login import LoginManager, login_required, logout_user
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
-from data.users import LoginForm
+from forms.login_form import LoginForm
 from flask_login import login_user
 from data import db_session
 from data.api_token import APIToken
