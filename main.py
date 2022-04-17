@@ -234,14 +234,16 @@ def get_information(folder: int):
     if current_user.is_authenticated:
         type_of_user = current_user.type_of_user
     inf_folder = information.folder
+    comment = get_comment(db_session.create_session(), information_id)
+    len_info = len(information.get_text_information()) // 100 + len(comment) * 40
     if information.is_blocked:
         inf_folder = 'blocked_information.html'
     db.close()
     return render_template(inf_folder, **inf, site='/', site1=f'/edit/{folder}',
                            is_authenticated=current_user.is_authenticated, name1=form, current_user=current_user,
                            likes=likes, is_liked=is_liked,
-                           comment=get_comment(db_session.create_session(), information_id),
-                           folder=folder, is_blocked=information.is_blocked, type_of_user=type_of_user)
+                           comment=comment,
+                           folder=folder, is_blocked=information.is_blocked, type_of_user=type_of_user, len_info=len_info)
 
 
 @app.route('/edit/<object_id>', methods=['POST', 'GET'])

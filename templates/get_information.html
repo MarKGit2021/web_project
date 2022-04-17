@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-<div class="content_block">
+<div class="content_block" style="height: {{ len_info + 150}}%;">
     <main role="main" class="container">
         <meta http-equiv="Content-Type" content="text/html; charset=cp1251"><center>
             <div>
@@ -64,8 +64,7 @@
             <hr>
             <h7 style="font-size: 10px;">{{ i["modified_date"] }}</h7>
             <h4>{{ i["user_name"] }} {{ i["user_surname"] }}</h4>
-            <p>
-                {{ i["text"]}}
+            <p>{{ i["text"]}}
             </p><br>
             {% endfor %}
         </div>
