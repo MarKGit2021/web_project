@@ -129,3 +129,4 @@ def blocking_information(object_id):
     db.commit()
     db.close()
     return jsonify({"status": "Ok"}), 200
+

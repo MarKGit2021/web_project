@@ -1,14 +1,15 @@
 import datetime
 
 import sqlalchemy
-from flask_login import UserMixin
-from sqlalchemy import orm
-from sqlalchemy_serializer import SerializerMixin
-from werkzeug.security import generate_password_hash
-
-from .likes import Like
-
 from .db_session import SqlAlchemyBase
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import orm
+from flask_login import UserMixin
+from sqlalchemy_serializer import SerializerMixin
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, SubmitField, EmailField, BooleanField
+from wtforms.validators import DataRequired
+from .likes import Like
 
 POINTS_CONST = 5  # Сколько нужно лайков, чтобы стать модератором
 
@@ -31,22 +32,11 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     queries = orm.relation('OldQueries', back_populates='user')
     tokens = orm.relation('APIToken', back_populates='user')
 
-    def check_password(self, password) -> bool:
-        """
-        Метод, который проверяет на правильность пароль\n
-        :param password: str
-        :return: bool
-        """
-        return self.__hashed_password == generate_password_hash(password)
-
     def set_password(self, password):
-        """
-        Метод, который добавляет пароль только если мы только что создали класс
-        :param password: str пароль
-        :return: None
-        """
-        if self.id is None:
-            self.__hashed_password = generate_password_hash(password)
+        self.__hashed_password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.__hashed_password, password)
 
     def get_user_information(self) -> dict:
         """
