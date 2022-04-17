@@ -43,21 +43,21 @@ z-index: 3;
 
 .login_block_button{
     font-family: 'Lobster', cursive;
-    position: fixed;
-    width: 100px;
-    height: 40px;
+    position: absolute;
+    width: 7%;
+    height: 60%;
     background-color: #008000;
-    left: 75%;
-    top: 20px;
+    left: 74.5%;
+    top: 15%;
 }
 .register_button{
     font-family: 'Lobster', cursive;
-    position: fixed;
-    width: 250px;
-    height: 40px;
+    position: absolute;
+    width: 15%;
+    height: 60%;
     background-color: #008000;
     left: 82%;
-    top: 20px;
+    top: 15%;
 }
 .private_office_button{
     font-family: 'Lobster', cursive;

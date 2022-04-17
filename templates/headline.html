@@ -19,12 +19,13 @@
     {% if current_user.is_authenticated %}
     <a href="/my-office"><button class="register_button" style="color: white">{{ current_user.name }}</button></a>
     <a href="/logout"><button class="login_block_button" style="color: white">Выйти</button></a>
-    <a href="/add-new/Новая"><button class="login_block_button" style="left: 68%; color: white;">Добавить</button></a>
-    <a href="/site"><button class="login_block_button" style="color: white; wight: 50px; left: 60%;">i</button></a>
+    <a href="/add-new/Новая"><button class="login_block_button" style="left: 67%; color: white;">Добавить</button></a>
+    <a href="/site"><button class="login_block_button" style="color: white; wight: 50px; left: 59.5%;">i</button></a>
 
     {% else %}
         <a href="/register"><button class="register_button" style="color: white; font-size: 16px;">Зарегистрироваться</button></a>
         <a href="/login"><button class="login_block_button" style="color: white; font-size: 16px;">Войти</button></a>
+    <a href="/site"><button class="login_block_button" style="color: white; wight: 50px; left: 67%;">i</button></a>
 
     {% endif %}
 </div>
