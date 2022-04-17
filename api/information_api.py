@@ -53,4 +53,3 @@ def add_new_information():
     db.commit()
     db.close()
     return jsonify({"status": "Ok"}), 200
-

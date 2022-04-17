@@ -75,7 +75,7 @@
         height: 60px;
         background-color: #008000;
         left: 82%;
-        top: 10px;        
+        top: 10px;
     }
 
 </style>
@@ -84,15 +84,21 @@
 </head>
 <body>
 
-    <!-- Begin page content -->
+<!-- Begin page content -->
 <div class="left_right_block"></div>
 <div class="block">
-    <a style="text-decoration: none" href="/"><div><h1 style="color: white" class="font_block_lobster">Название сайта!</h1></div></a>
-    {% if not is_authenticated %}
-        <a href="/login"><button class="login_block_button" style="color: white; font-size: 16px;">Войти</button></a>
-        <a href="/register"><button class="register_button" style="color: white; font-size: 16px;">Зарегистрироваться</button></a>
+    <a style="text-decoration: none" href="/">
+        <div><h1 style="color: white" class="font_block_lobster">Название сайта!</h1></div>
+    </a>
+    {% if current_user.is_authenticated %}
+    <a href="/my-office"><button class="register_button" style="color: white">{{ current_user.name }}</button></a>
+    <a href="/logout"><button class="login_block_button" style="color: white">Выйти</button></a>
+    <a href="/add-new/Новая"><button class="login_block_button" style="left: 68%; color: white;">Добавить</button></a>
+
     {% else %}
-        <a href="/my-office"><button class="private_office_button" style="color: white; font-size: 16px;">Личный кабинет</button></a>
+        <a href="/register"><button class="register_button" style="color: white; font-size: 16px;">Зарегистрироваться</button></a>
+        <a href="/login"><button class="login_block_button" style="color: white; font-size: 16px;">Войти</button></a>
+
     {% endif %}
 </div>
 <!-- <div class="content_block"></div> -->
