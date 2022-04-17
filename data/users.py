@@ -103,15 +103,3 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
             self.type_of_user = 1
         else:
             self.type_of_user = 0
-
-
-
-
-
-class RegisterForm(FlaskForm):
-    email = EmailField('Почта', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
-    name = StringField('Имя пользователя', validators=[DataRequired()])
-    surname = StringField('Фамилия  пользователя', validators=[DataRequired()])
-    submit = SubmitField('Создать аккаунт')

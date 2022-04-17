@@ -12,7 +12,7 @@ from data.information import Information
 from data.users import User
 from data.words import Word
 from forms.like_comment import LikeCommentForm
-from data.users import RegisterForm
+from forms.register_form import RegisterForm
 from forms.add_complaints import AddComplaint
 from forms.new_token import NewTokenForm
 from forms.read_complaint import ReadComplaint
