@@ -106,9 +106,13 @@ class Information(SqlAlchemyBase):
 ''' + text + '''
 {% endblock %}
 '''
+        if self.folder is None or 'new' in self.folder:
+            self.folder = f'./files/information_{self.id}.html'
+        else:
+            self.folder = f'./files/new_information_{self.id}.html'
+            folder += 'new_'
         with open(f'{folder}information_{self.id}.html', 'w', encoding='utf-8') as file:
             file.write(text)
-        self.folder = f'./files/information_{self.id}.html'
 
     def append_word(self, word: Word, db):
         """
