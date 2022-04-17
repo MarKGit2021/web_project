@@ -76,7 +76,7 @@ def add_new_information(word):
     В приоритете написанный текст - если он есть, то берется он, а не файл\n
     :return:
     """
-    if not flask_login.current_user.is_authenticated:# пока нет логина
+    if not flask_login.current_user.is_authenticated:  # пока нет логина
         return redirect('/login')
     form = AddForm()
     error = []
@@ -185,7 +185,7 @@ def search_information(word):
         return search(word)
 
 
-@app.route('/information/<int:folder>', methods=['GET', 'POST', 'PUT'])
+@app.route('/information/<int:folder>', methods=['GET', 'POST'])
 def get_information(folder: int):
     """
     Метод, который выводит информацию пользователя. Адрес записывается как айди информации + три рандомные цифры
@@ -229,12 +229,13 @@ def get_information(folder: int):
     type_of_user = 0
     if current_user.is_authenticated:
         type_of_user = current_user.type_of_user
-    db.close()
     inf_folder = information.folder
     if information.is_blocked:
         inf_folder = 'blocked_information.html'
+    db.close()
     return render_template(inf_folder, **inf, site='/', site1=f'/edit/{folder}',
-                           is_authenticated=True, name1=form, current_user=current_user, likes=likes, is_liked=is_liked,
+                           is_authenticated=current_user.is_authenticated, name1=form, current_user=current_user,
+                           likes=likes, is_liked=is_liked,
                            comment=get_comment(db_session.create_session(), information_id),
                            folder=folder, is_blocked=information.is_blocked, type_of_user=type_of_user)
 
@@ -247,9 +248,9 @@ def edit_information(object_id: int):
     :return:
     """
     db = db_session.create_session()
-    current_user = db.query(User).first()
-    # if not current_user.is_authenticated:
-    #     return redirect('/login')
+    current_user = flask_login.current_user
+    if not current_user.is_authenticated:
+        return redirect('/login')
     if current_user.type_of_user == 0:
         db.close()
         abort(404)
