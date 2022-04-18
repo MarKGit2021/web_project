@@ -1,0 +1,66 @@
+{% extends "headline.html" %}
+
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация</title>
+    <style type="text/css">
+        table {
+    /*width: 100%;  Ширина таблицы */
+    table-layout: fixed;
+    width: 100%;
+   }
+   td {
+    border: 1px solid #333;
+    padding: 5px;
+    position: relative;
+    height: 50px;
+   }
+        td a {
+    position: absolute;
+    left: 0; right: 0;
+    top: 0; bottom: 0;
+    padding: 5px;
+    color: black;
+}
+    .header_block{
+        font-family: 'Lobster', cursive;
+        position: absolute;
+        font-size: 75px;
+        top: 20px;
+        left: 10%;
+        right: 10%;
+    }
+    </style>
+</head>
+<body>
+
+<div class="content_block">
+<h1 class="header_block">
+            По вашему запросу найдено:
+    </h1>
+    <center><div class="top_10_information_block">
+        <table class="table">
+          <thead>
+            <tr class="table-active">
+              <th scope="col">Количество лайков</th>
+              <th scope="col">Запрос</th>
+                <th scope="col">Автор</th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for inf in inf_information %}
+            <tr>
+              <td class="alert alert-success"><a href="../information/{{ inf['address'] }}">{{ inf["points"] }}</a></td>
+              <td class="alert alert-secondary"><a href="../information/{{ inf['address'] }}">{{ inf["main_word"] }}</a></td>
+              <td class="alert alert-secondary"><a href="../information/{{ inf['address'] }}">{{ inf["user_name"] }} {{ inf["user_surname"] }}</a></td>
+            </tr>
+        {% endfor %}
+          </tbody>
+        </table>
+    </div></center>
+</div>
+</body>
+</html>
+{% endblock %}

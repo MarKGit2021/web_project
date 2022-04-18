@@ -1,0 +1,70 @@
+.block{
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    background-color: #006400;
+    z-index: 6;
+}
+.content_block{
+    position: absolute;
+    /*width: 80%;*/
+    height: 150%;
+    z-index: 2;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    top: 160px;
+    background-color: white;
+}
+
+.left_right_block{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    /*background-image: url('./green_fon_1.jpg');*/
+    background-color:  #ECEABE;
+    z-index: 1;
+}
+.font_block_lobster{
+    font-family: 'Lobster', cursive;
+    }
+.big_header_block{
+    font-family: 'Lobster', cursive;
+    font-size: 100px;
+}
+.top_10_information_block{
+font-family: 'Lobster', cursive;
+position: absolute;
+top: 250px;
+left: 10%;
+right: 10%;
+z-index: 3;
+}
+
+.login_block_button{
+    font-family: 'Lobster', cursive;
+    position: absolute;
+    width: 7%;
+    height: 60%;
+    background-color: #008000;
+    left: 74.5%;
+    top: 15%;
+}
+.register_button{
+    font-family: 'Lobster', cursive;
+    position: absolute;
+    width: 15%;
+    height: 60%;
+    background-color: #008000;
+    left: 82%;
+    top: 15%;
+}
+.private_office_button{
+    font-family: 'Lobster', cursive;
+    position: fixed;
+    width: 250px;
+    height: 60px;
+    background-color: #008000;
+    left: 82%;
+    top: 10px;
+}
