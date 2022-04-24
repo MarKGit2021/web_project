@@ -26,9 +26,9 @@ def search(word: str):
     if len(list(word)) == 0:
         db.close()
         return []
-    information = {i.information.points: i.information.get_information() for i in word[0].all_information}
+    information = [i.information.get_information() for i in word[0].all_information]
     db.close()
-    return information
+    return {'information': information}
 
 
 def check_token(token, db):
