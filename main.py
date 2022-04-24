@@ -235,7 +235,7 @@ def get_information(folder: int):
         type_of_user = current_user.type_of_user
     inf_folder = information.folder
     comment = get_comment(db_session.create_session(), information_id)
-    len_info = len(information.get_text_information()) // 100 + len(comment) * 40
+    len_info = len(information.get_text_information()) // 100 + len(comment) * 40 + 150
     if information.is_blocked:
         inf_folder = 'blocked_information.html'
     db.close()
