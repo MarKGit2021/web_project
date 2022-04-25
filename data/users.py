@@ -6,9 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import orm
 from flask_login import UserMixin
 from sqlalchemy_serializer import SerializerMixin
-from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField, EmailField, BooleanField
-from wtforms.validators import DataRequired
 from .likes import Like
 
 POINTS_CONST = 5  # Сколько нужно лайков, чтобы стать модератором
@@ -99,4 +96,6 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         :return: None
         """
         self.points += value
+        if self.type_of_user == 2:
+            return
         self.type_of_user = int(self.points >= POINTS_CONST)
