@@ -57,7 +57,7 @@ def get_information(word):
     if not flag[0]:
         return flag[2], flag[3]
     information = search(word)
-    return jsonify(information[max(information.keys())])
+    return jsonify(information[max(information.keys())][0])
 
 
 @blueprint.route('/api/all_information/<word>', methods=['GET'])
